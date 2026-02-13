@@ -1,0 +1,25 @@
+# Java/Maven
+**/target/
+**/.mvn/
+**/mvnw
+**/mvnw.cmd
+**/*.log
+**/dep_tree*.txt
+
+# IDEs
+**/.metadata/
+**/.settings/
+**/.project
+**/.classpath
+**/.factorypath
+**/.idea/
+**/.vscode/
+*.swp
+
+# Node/React
+**/node_modules/
+**/dist/
+**/.env
+**/.env.local
+**/.DS_Store
+npm-debug.log*
