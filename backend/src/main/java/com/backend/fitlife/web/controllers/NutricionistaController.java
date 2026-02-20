@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.fitlife.services.NutricionistaService;
 import com.backend.fitlife.services.dto.NutricionistaDTO;
 import com.backend.fitlife.services.mappers.NutricionistaMapper;
+import com.backend.fitlife.persistence.entities.Nutricionista;
 
 @RestController
 @RequestMapping("/api/nutricionistas")
@@ -30,6 +31,12 @@ public class NutricionistaController {
 	public ResponseEntity<NutricionistaDTO> getById(@PathVariable int id) {
 		NutricionistaDTO dto = this.nutricionistaMapper.toDto(this.nutricionistaService.findById(id));
 		return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/email/{email}")
+	public ResponseEntity<NutricionistaDTO> getByEmail(@PathVariable String email) {
+		Nutricionista dto = this.nutricionistaService.findByEmail(email);
+		return dto != null ? ResponseEntity.ok(this.nutricionistaMapper.toDto(dto)) : ResponseEntity.notFound().build();
 	}
 
 	@PostMapping

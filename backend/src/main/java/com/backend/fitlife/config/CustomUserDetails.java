@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.backend.fitlife.persistence.entities.Usuario;
+import com.backend.fitlife.persistence.entities.Nutricionista;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -16,6 +17,11 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(Usuario usuario) {
         this.name = usuario.getEmail();
         this.password = usuario.getPassword();
+    }
+
+    public CustomUserDetails(Nutricionista nutricionista) {
+        this.name = nutricionista.getEmail();
+        this.password = nutricionista.getPassword();
     }
 
     @Override

@@ -84,4 +84,20 @@ public class DatabaseSeeder {
             }
         };
     }
+
+    @Bean
+    CommandLineRunner initUsuarios(
+            com.backend.fitlife.persistence.repositories.NutricionistaRepository nutricionistaRepo,
+            org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
+        return args -> {
+            if (nutricionistaRepo.count() == 0) {
+                com.backend.fitlife.persistence.entities.Nutricionista admin = new com.backend.fitlife.persistence.entities.Nutricionista();
+                admin.setNombre("Nutricionista Principal");
+                admin.setEmail("nutricionista@gmail.com");
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                nutricionistaRepo.save(admin);
+                System.out.println("Base de datos inicializada con cuenta de Nutricionista de prueba.");
+            }
+        };
+    }
 }

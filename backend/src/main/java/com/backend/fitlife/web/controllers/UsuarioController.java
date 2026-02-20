@@ -29,8 +29,26 @@ public class UsuarioController {
 		return ResponseEntity.notFound().build();
 	}
 
+	@GetMapping("/email/{email}")
+	public ResponseEntity<Usuario> getByEmail(@PathVariable String email) {
+		Usuario usuario = this.usuarioService.findByEmail(email);
+		if (usuario != null) {
+			return ResponseEntity.ok(usuario);
+		}
+		return ResponseEntity.notFound().build();
+	}
+
 	@PostMapping
 	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
+		return ResponseEntity.ok(this.usuarioService.save(usuario));
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Usuario> update(@PathVariable int id, @RequestBody Usuario usuario) {
+		if (this.usuarioService.findById(id) == null) {
+			return ResponseEntity.notFound().build();
+		}
+		usuario.setId(id);
 		return ResponseEntity.ok(this.usuarioService.save(usuario));
 	}
 

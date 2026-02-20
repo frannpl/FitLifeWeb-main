@@ -20,6 +20,10 @@ public class UsuarioService {
 		return this.usuarioRepository.findById(id).orElse(null);
 	}
 
+	public Usuario findByEmail(String email) {
+		return this.usuarioRepository.findByEmail(email).orElse(null);
+	}
+
 	public Usuario save(Usuario usuario) {
 		return this.usuarioRepository.save(usuario);
 	}

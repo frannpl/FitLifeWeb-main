@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.fitlife.config.JwtUtil;
 import com.backend.fitlife.persistence.entities.Usuario;
+import com.backend.fitlife.persistence.entities.Nutricionista;
 import com.backend.fitlife.persistence.repositories.UsuarioRepository;
+import com.backend.fitlife.persistence.repositories.NutricionistaRepository;
 import com.backend.fitlife.services.dto.UsuarioDTO;
 
 @RestController
@@ -26,6 +28,9 @@ public class AuthController {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private NutricionistaRepository nutricionistaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,6 +46,13 @@ public class AuthController {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         repository.save(usuario);
         return "Usuario registrado correctamente";
+    }
+
+    @PostMapping("/registerNutricionista")
+    public String addNewNutricionista(@RequestBody Nutricionista nutricionista) {
+        nutricionista.setPassword(passwordEncoder.encode(nutricionista.getPassword()));
+        nutricionistaRepository.save(nutricionista);
+        return "Nutricionista registrado correctamente";
     }
 
     @GetMapping("/token")
