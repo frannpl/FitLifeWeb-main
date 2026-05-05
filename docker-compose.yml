@@ -1,0 +1,94 @@
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: fitlifeweb-db
+    environment:
+      POSTGRES_DB: fitlife
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rootpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - fitlife-db-data:/var/lib/postgresql/data
+      # Este mapeo ejecuta el script SQL automaticamente cuando se crea la base de datos por primera vez
+      - ./supabase_schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - fitlife-net
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fitlifeweb-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fitlife
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+    depends_on:
+      - db
+    networks:
+      - fitlife-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: fitlifeweb-frontend
+    ports:
+      - "8081:80" # Puerto libre para evitar conflictos con Laragon (80) y DawTask (5173)
+    depends_on:
+      - backend
+    networks:
+      - fitlife-net
+    restart: unless-stopped
+
+  pg-meta:
+    image: supabase/postgres-meta:v0.96.3
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: fitlife
+      PG_META_DB_USER: supabase_admin
+      PG_META_DB_PASSWORD: rootpassword
+      CRYPTO_KEY: "not-so-secret-crypto-key-for-local-dev"
+    networks:
+      - fitlife-net
+
+  studio:
+    image: supabase/studio:2026.04.08-sha-205cbe7
+    ports:
+      - "8082:3000"
+    environment:
+      SUPABASE_PUBLIC_URL: http://localhost:8082
+      STUDIO_PG_META_URL: http://pg-meta:8080
+      DEFAULT_ORGANIZATION_NAME: FitLife
+      DEFAULT_PROJECT_NAME: FitLifeWeb
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: db
+      POSTGRES_DB: fitlife
+      POSTGRES_USER: supabase_admin
+      POSTGRES_PASSWORD: rootpassword
+      PG_META_CRYPTO_KEY: "not-so-secret-crypto-key-for-local-dev"
+      SNIPPETS_MANAGEMENT_FOLDER: /app/snippets
+      EDGE_FUNCTIONS_MANAGEMENT_FOLDER: /app/edge-functions
+    volumes:
+      - ./supabase/snippets:/app/snippets
+      - ./supabase/functions:/app/edge-functions
+    networks:
+      - fitlife-net
+    depends_on:
+      - pg-meta
+
+networks:
+  fitlife-net:
+    driver: bridge
+
+volumes:
+  fitlife-db-data:

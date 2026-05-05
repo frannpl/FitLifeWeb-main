@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-surface-base dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-health-100 dark:selection:bg-health-900/30 selection:text-health-900 dark:selection:text-health-100 transition-colors duration-500;
+    }
+}
+
+@layer utilities {
+    .glass-card {
+        @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.04)];
+    }
+    
+    .text-gradient-health {
+        @apply bg-gradient-to-r from-health-500 to-wellness-500 bg-clip-text text-transparent;
+    }
+
+    .card-premium {
+        @apply bg-white dark:bg-slate-900 rounded-4xl border border-slate-100/60 dark:border-slate-800/50 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.02)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] transition-all duration-700;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        @apply bg-surface-base;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-slate-200 rounded-full hover:bg-health-500 transition-colors;
+    }
+}
+
+@keyframes slow-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-slow-spin {
+    animation: slow-spin 20s linear infinite;
+}
