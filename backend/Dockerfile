@@ -30,5 +30,5 @@ COPY --from=build /app/target/*.jar app.jar
 # Exponemos el puerto del backend
 EXPOSE 8080
 
-# Punto de entrada de la aplicacion
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Punto de entrada de la aplicacion con limites de memoria para Render Free (512MB)
+ENTRYPOINT ["java", "-Xmx384m", "-Xms256m", "-jar", "app.jar"]
