@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Leaf, Activity, ChevronRight, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { fetchAPI } from '../api';
 
 const PlanesPage = () => {
     const [planes, setPlanes] = useState([]);
@@ -10,8 +9,8 @@ const PlanesPage = () => {
 
     useEffect(() => {
         Promise.all([
-            fetch('/api/planes').then(res => res.json()),
-            fetch('/api/comidas').then(res => res.json())
+            fetchAPI('/planes').then(res => res.json()),
+            fetchAPI('/comidas').then(res => res.json())
         ])
             .then(([planesData, comidasData]) => {
                 setPlanes(planesData);

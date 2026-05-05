@@ -10,6 +10,7 @@ import {
     ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell, PieChart, Pie
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
+import { fetchAPI } from '../api';
 
 // --- STYLING CONSTANTS ---
 const COLORS = {
@@ -468,7 +469,6 @@ const DashboardNutricionista = ({ onLogout }) => {
     const [searchRutinas, setSearchRutinas] = useState('');
     const [modalConfig, setModalConfig] = useState({ isOpen: false, type: null, data: null });
     const [deleteConfirm, setDeleteConfirm] = useState(null); 
-    const API_BASE = '/api';
 
     const filteredUsuarios = useMemo(() => {
         return usuarios.filter(u => 
@@ -498,13 +498,13 @@ const DashboardNutricionista = ({ onLogout }) => {
 
         try {
             if (userEmail) {
-                const profileRes = await fetch(`${API_BASE}/nutricionistas/email/${userEmail}`, { headers }).then(res => res.ok ? res.json() : null);
+                const profileRes = await fetchAPI(`/nutricionistas/email/${userEmail}`, { headers }).then(res => res.ok ? res.json() : null);
                 if (profileRes) setProfile(profileRes);
             }
             const [userRes, planRes, rutRes] = await Promise.all([
-                fetch(`${API_BASE}/usuarios`, { headers }).then(r => r.ok ? r.json() : []),
-                fetch(`${API_BASE}/planes`, { headers }).then(r => r.ok ? r.json() : []),
-                fetch(`${API_BASE}/rutinas`, { headers }).then(r => r.ok ? r.json() : [])
+                fetchAPI('/usuarios', { headers }).then(r => r.ok ? r.json() : []),
+                fetchAPI('/planes', { headers }).then(r => r.ok ? r.json() : []),
+                fetchAPI('/rutinas', { headers }).then(r => r.ok ? r.json() : [])
             ]);
 
             setUsuarios(userRes); 
@@ -522,20 +522,20 @@ const DashboardNutricionista = ({ onLogout }) => {
 
         try {
             // 1. Save User Metrics
-            await fetch(`${API_BASE}/usuarios/${editedClient.id}`, {
+            await fetchAPI(`/usuarios/${editedClient.id}`, {
                 method: 'PUT', headers, body: JSON.stringify(editedClient)
             });
 
             // 2. Save/Update Nutrition Plan
-            const planEndpoint = assignedPlan.id ? `${API_BASE}/planes/${assignedPlan.id}` : `${API_BASE}/planes`;
+            const planEndpoint = assignedPlan.id ? `/planes/${assignedPlan.id}` : '/planes';
             const planMethod = assignedPlan.id ? 'PUT' : 'POST';
-            await fetch(planEndpoint, { method: planMethod, headers, body: JSON.stringify(assignedPlan) });
+            await fetchAPI(planEndpoint, { method: planMethod, headers, body: JSON.stringify(assignedPlan) });
 
             // 3. Save/Update Training Routine (if pro)
             if (editedClient.isPro) {
-                const rutEndpoint = assignedRoutine.id ? `${API_BASE}/rutinas/${assignedRoutine.id}` : `${API_BASE}/rutinas`;
+                const rutEndpoint = assignedRoutine.id ? `/rutinas/${assignedRoutine.id}` : '/rutinas';
                 const rutMethod = assignedRoutine.id ? 'PUT' : 'POST';
-                await fetch(rutEndpoint, { method: rutMethod, headers, body: JSON.stringify(assignedRoutine) });
+                await fetchAPI(rutEndpoint, { method: rutMethod, headers, body: JSON.stringify(assignedRoutine) });
             }
 
             setSelectedClient(null);
@@ -546,12 +546,12 @@ const DashboardNutricionista = ({ onLogout }) => {
     const handleGenericSave = async (formData) => {
         const type = modalConfig.type;
         const isEdit = !!formData.id;
-        const endpoint = `${API_BASE}/${type}${isEdit ? `/${formData.id}` : ''}`;
+        const endpoint = `/${type}${isEdit ? `/${formData.id}` : ''}`;
         const method = isEdit ? 'PUT' : 'POST';
         const token = localStorage.getItem('token');
 
         try {
-            const res = await fetch(endpoint, {
+            const res = await fetchAPI(endpoint, {
                 method,
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(formData)
@@ -568,7 +568,7 @@ const DashboardNutricionista = ({ onLogout }) => {
         const { type, id } = deleteConfirm;
         const token = localStorage.getItem('token');
         try {
-            await fetch(`${API_BASE}/${type}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            await fetchAPI(`/${type}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
             setDeleteConfirm(null);
             fetchData();
         } catch (e) { console.error(e); }

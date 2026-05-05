@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { X, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { fetchAPI } from '../api';
 
 const AuthModal = ({ isOpen, onClose, onLogin }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -26,7 +25,7 @@ const AuthModal = ({ isOpen, onClose, onLogin }) => {
         try {
             let response;
             if (isLogin) {
-                response = await fetch(`/api/auth/token`, {
+                response = await fetchAPI('/auth/token', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -35,8 +34,8 @@ const AuthModal = ({ isOpen, onClose, onLogin }) => {
                     })
                 });
             } else {
-                const endpoint = isNutricionista ? '/api/auth/registerNutricionista' : '/api/auth/register';
-                response = await fetch(endpoint, {
+                const endpoint = isNutricionista ? '/auth/registerNutricionista' : '/auth/register';
+                response = await fetchAPI(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
@@ -51,7 +50,7 @@ const AuthModal = ({ isOpen, onClose, onLogin }) => {
                 const token = await response.text();
                 let role = 'usuario';
                 try {
-                    const checkNutri = await fetch(`/api/nutricionistas/email/${formData.email}`, {
+                    const checkNutri = await fetchAPI(`/nutricionistas/email/${formData.email}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     if (checkNutri.ok) role = 'nutricionista';

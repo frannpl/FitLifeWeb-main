@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Activity, Dumbbell, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { fetchAPI } from '../api';
 
 const RutinasPage = () => {
     const [rutinas, setRutinas] = useState([]);
@@ -8,7 +7,7 @@ const RutinasPage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('/api/rutinas')
+        fetchAPI('/rutinas')
             .then(res => {
                 if (!res.ok) throw new Error("Error en la respuesta del servidor");
                 return res.json();

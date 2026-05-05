@@ -45,7 +45,8 @@ public class SecurityConfig {
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-        configuration.setAllowedOrigins(java.util.List.of(
+        
+        java.util.List<String> origins = new java.util.ArrayList<>(java.util.List.of(
             "http://localhost",
             "http://localhost:80",
             "http://localhost:5173",
@@ -55,6 +56,15 @@ public class SecurityConfig {
             "http://127.0.0.1:5173",
             "http://127.0.0.1:8081"
         ));
+
+        String envOrigins = System.getenv("ALLOWED_ORIGINS");
+        if (envOrigins != null && !envOrigins.isEmpty()) {
+            for (String origin : envOrigins.split(",")) {
+                origins.add(origin.trim());
+            }
+        }
+
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "Accept", "X-Requested-With", "Cache-Control"));
         configuration.setAllowCredentials(true);

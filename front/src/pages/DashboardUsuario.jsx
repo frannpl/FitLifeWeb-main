@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Activity, Dumbbell, Utensils, TrendingUp, ChevronRight, Users, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { fetchAPI } from '../api';
 
 const DashboardUsuario = () => {
     const userStr = localStorage.getItem('user');
@@ -14,7 +13,7 @@ const DashboardUsuario = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (userStr && token) {
-            fetch(`/api/usuarios/email/${userStr}`, {
+            fetchAPI(`/usuarios/email/${userStr}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
                 .then(res => res.ok ? res.json() : null)
@@ -24,7 +23,7 @@ const DashboardUsuario = () => {
                         const mergedProfile = { ...data, ...proData };
                         setProfile(mergedProfile);
 
-                        fetch('/api/planes', { headers: { 'Authorization': `Bearer ${token}` }})
+                        fetchAPI('/planes', { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(planes => {
                                 const mergedPlanes = planes.map(p => ({ ...p, ...JSON.parse(localStorage.getItem(`pro_planes_${p.id}`) || '{}') }));
@@ -32,7 +31,7 @@ const DashboardUsuario = () => {
                                 if (myPlan) setAssignedPlan(myPlan);
                             });
 
-                        fetch('/api/rutinas', { headers: { 'Authorization': `Bearer ${token}` }})
+                        fetchAPI('/rutinas', { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(rutinas => {
                                 const mergedRutinas = rutinas.map(r => ({ ...r, ...JSON.parse(localStorage.getItem(`pro_rutinas_${r.id}`) || '{}') }));
