@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import { Leaf, Activity, ChevronRight, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fetchAPI } from '../api';
 
