@@ -126,9 +126,14 @@ const DashboardUsuario = () => {
                     )}
                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Tu Nutricionista:</p>
                     <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight mb-8">Julián Cubero</p>
-                    <button className="w-full py-4 bg-health-500 hover:bg-health-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-health-500/20">
+                    <a 
+                        href="https://wa.me/34618555371?text=Hola,%20soy%20un%20cliente%20de%20FitLife%20Pro%20y%20necesito%20una%20consulta." 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-full py-4 bg-health-500 hover:bg-health-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-health-500/20 block text-center"
+                    >
                         Contactar WhatsApp
-                    </button>
+                    </a>
                 </motion.div>
             </div>
 
