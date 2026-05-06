@@ -55,7 +55,7 @@ const LandingPage = () => {
                         <motion.h1 
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-7xl md:text-[9.5rem] font-black text-slate-900 dark:text-white tracking-tighter mb-12 leading-[0.85] transition-colors duration-700 font-['Montserrat']"
+                            className="text-5xl md:text-[9.5rem] font-black text-slate-900 dark:text-white tracking-tighter mb-12 leading-[0.85] transition-colors duration-700 font-['Montserrat']"
                         >
                             Esculpe tu Cuerpo <br/>
                             <span className="text-gradient-health italic font-['Playfair_Display']">con Precisión.</span>

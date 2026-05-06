@@ -214,7 +214,7 @@ const DashboardUsuario = () => {
                 <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 gap-8">
                     <div>
                         <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional FitLife</span>
-                        <h1 className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Hola, {(displayProfile.nombre || 'Usuario').split(' ')[0]}.</h1>
+                        <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Hola, {(displayProfile.nombre || 'Usuario').split(' ')[0]}.</h1>
                         <p className="mt-4 text-slate-400 dark:text-slate-500 font-medium max-w-lg">Aquí tienes el resumen de tu evolución biológica y tus próximos pasos.</p>
                     </div>
                     <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">

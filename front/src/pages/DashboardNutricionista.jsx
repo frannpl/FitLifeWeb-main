@@ -453,6 +453,7 @@ const MetricInput = ({ label, value, onChange, name, type = "number", step = "0.
 const DashboardNutricionista = ({ onLogout }) => {
     const userEmail = localStorage.getItem('user');
     const [activeTab, setActiveTab] = useState('dashboard');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedClient, setSelectedClient] = useState(null);
@@ -602,10 +603,24 @@ const DashboardNutricionista = ({ onLogout }) => {
     }
 
     return (
-        <div className="min-h-screen bg-surface-base dark:bg-slate-950 flex text-slate-900 dark:text-white transition-colors duration-500">
-            <AnimatePresence mode="wait">
+        <div className="min-h-screen bg-surface-base dark:bg-slate-950 flex text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden relative">
+            <AnimatePresence>
+                {isSidebarOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] lg:hidden"
+                    />
+                )}
+            </AnimatePresence>
             {/* Sidebar refined - Premium Slate aesthetic */}
-            <aside className="w-80 fixed inset-y-0 left-0 bg-slate-900 dark:bg-slate-950 border-r border-white/5 z-50 flex flex-col p-10 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.2)]">
+            <aside className={`
+                w-80 fixed inset-y-0 left-0 bg-slate-900 dark:bg-slate-950 border-r border-white/5 z-[70] flex flex-col p-10 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.2)]
+                transition-transform duration-500 lg:translate-x-0
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
                 <div className="mb-20 flex items-center gap-4">
                     <div className="w-12 h-12 bg-health-500 rounded-2xl flex items-center justify-center shadow-lg shadow-health-500/20">
                         <Activity className="text-white" size={24} />
@@ -623,7 +638,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                     ].map(item => (
                         <button 
                             key={item.id} 
-                            onClick={() => { setActiveTab(item.id); setIsProfileOpen(false); }} 
+                            onClick={() => { setActiveTab(item.id); setIsProfileOpen(false); setIsSidebarOpen(false); }} 
                             className={`w-full flex items-center gap-5 px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest transition-all ${activeTab === item.id ? 'bg-health-500 text-white shadow-2xl shadow-health-500/20' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}
                         >
                             {item.icon} {item.label}
@@ -637,11 +652,19 @@ const DashboardNutricionista = ({ onLogout }) => {
             </aside>
 
             {/* Main Area */}
-            <main className="flex-1 ml-80 p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
-                <header className="flex justify-between items-end mb-16 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-6 -m-6 mb-10 rounded-3xl border border-transparent dark:border-slate-800/50">
-                    <div>
-                        <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-3 block">Gabinete de Nutrición Deportiva</span>
-                        <h2 className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
+            <main className="flex-1 lg:ml-80 p-6 md:p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
+                <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-6 -m-6 mb-10 rounded-3xl border border-transparent dark:border-slate-800/50">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="lg:hidden p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm text-slate-400"
+                        >
+                            <Menu size={24} />
+                        </button>
+                        <div>
+                            <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-3 block">Gabinete de Nutrición Deportiva</span>
+                            <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
+                        </div>
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="text-right">
@@ -717,7 +740,7 @@ const DashboardNutricionista = ({ onLogout }) => {
 
                 {activeTab === 'dashboard' ? (
                     <div className="space-y-12">
-                        <div className="grid grid-cols-4 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             {[
                                 { l: 'Clientes', v: usuarios.length, i: <Users />, c: 'text-wellness-600' },
                                 { l: 'Planes Activos', v: planes.length, i: <FileText />, c: 'text-health-600' },
@@ -735,17 +758,19 @@ const DashboardNutricionista = ({ onLogout }) => {
                         <div className="grid lg:grid-cols-12 gap-10">
                             <div className="lg:col-span-8 card-premium p-12 bg-white dark:bg-slate-900 h-[500px] border-slate-100 dark:border-slate-800">
                                 <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-12 tracking-tighter">Actividad de Clientes</h3>
-                                <ResponsiveContainer width="100%" height="75%">
-                                    <AreaChart data={[
-                                        { n: 'Lun', v: 40 }, { n: 'Mar', v: 65 }, { n: 'Mie', v: 55 }, { n: 'Jue', v: 85 }, { n: 'Vie', v: 75 }, { n: 'Sab', v: 95 }, { n: 'Dom', v: 110 }
-                                    ]}>
-                                        <defs>
-                                            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.1}/><stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/></linearGradient>
-                                        </defs>
-                                        <XAxis dataKey="n" axisLine={false} tickLine={false} tickMargin={15} stroke="#64748b" fontSize={10} fontWeight={900} />
-                                        <Area type="monotone" dataKey="v" stroke="#0ea5e9" strokeWidth={5} fill="url(#g)" />
-                                    </AreaChart>
-                                </ResponsiveContainer>
+                                <div className="h-[300px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <AreaChart data={[
+                                            { n: 'Lun', v: 40 }, { n: 'Mar', v: 65 }, { n: 'Mie', v: 55 }, { n: 'Jue', v: 85 }, { n: 'Vie', v: 75 }, { n: 'Sab', v: 95 }, { n: 'Dom', v: 110 }
+                                        ]}>
+                                            <defs>
+                                                <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.1}/><stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/></linearGradient>
+                                            </defs>
+                                            <XAxis dataKey="n" axisLine={false} tickLine={false} tickMargin={15} stroke="#64748b" fontSize={10} fontWeight={900} />
+                                            <Area type="monotone" dataKey="v" stroke="#0ea5e9" strokeWidth={5} fill="url(#g)" />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
                             <div className="lg:col-span-4 card-premium p-10 bg-white dark:bg-slate-900 flex flex-col h-[500px] border-slate-100 dark:border-slate-800">
                                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-10 tracking-tighter">Últimas Acciones</h3>
