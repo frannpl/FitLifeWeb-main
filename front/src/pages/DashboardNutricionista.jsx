@@ -645,7 +645,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="text-right">
-                            <p className="text-xs font-black text-slate-900 dark:text-white">{profile?.nombre || 'Nutr. FitLife'}</p>
+                            <p className="text-xs font-black text-slate-900 dark:text-white">{(profile?.nombre || 'Nutr. FitLife').replace(/supabase/gi, '').trim() || 'Nutricionista Principal'}</p>
                             <p className="text-[9px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest mt-1">Nutricionista Principal</p>
                         </div>
                         <div className="relative">
@@ -776,7 +776,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                                         setModalConfig({
                                             isOpen: true,
                                             type: 'nutricionistas',
-                                            title: 'Nueva Cuenta Staff',
+                                            title: 'Nueva Cuenta',
                                             fields: [
                                                 { name: 'nombre', label: 'Nombre Completo', type: 'text' },
                                                 { name: 'email', label: 'Email', type: 'email' },
@@ -787,7 +787,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                                     }}
                                     className="px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center gap-3"
                                 >
-                                    <Plus size={18} /> Nueva Cuenta Staff
+                                    <Plus size={18} /> Nueva Cuenta
                                 </button>
                             </div>
                             
