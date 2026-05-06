@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { X, Activity } from 'lucide-react';
 import { fetchAPI } from '../api';
 
 const AuthModal = ({ isOpen, onClose, onLogin }) => {
