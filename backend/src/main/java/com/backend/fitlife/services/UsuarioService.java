@@ -12,6 +12,9 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	@Autowired
+	private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
 	public List<Usuario> findAll() {
 		return this.usuarioRepository.findAll();
 	}
@@ -25,6 +28,9 @@ public class UsuarioService {
 	}
 
 	public Usuario save(Usuario usuario) {
+		if (usuario.getPassword() != null && !usuario.getPassword().startsWith("$2a$")) {
+			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+		}
 		return this.usuarioRepository.save(usuario);
 	}
 

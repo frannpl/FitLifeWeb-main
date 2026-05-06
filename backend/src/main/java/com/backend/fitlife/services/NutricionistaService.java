@@ -12,6 +12,9 @@ public class NutricionistaService {
 	@Autowired
 	private NutricionistaRepository nutricionistaRepository;
 
+	@Autowired
+	private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
 	public List<Nutricionista> findAll() {
 		return this.nutricionistaRepository.findAll();
 	}
@@ -21,6 +24,9 @@ public class NutricionistaService {
 	}
 
 	public Nutricionista save(Nutricionista nutricionista) {
+		if (nutricionista.getPassword() != null && !nutricionista.getPassword().startsWith("$2a$")) {
+			nutricionista.setPassword(passwordEncoder.encode(nutricionista.getPassword()));
+		}
 		return this.nutricionistaRepository.save(nutricionista);
 	}
 

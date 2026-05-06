@@ -31,16 +31,14 @@ const DashboardUsuario = () => {
                         fetchAPI('/planes', { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(planes => {
-                                const mergedPlanes = planes.map(p => ({ ...p, ...JSON.parse(localStorage.getItem(`pro_planes_${p.id}`) || '{}') }));
-                                const myPlan = mergedPlanes.find(p => p.usuarioId == data.id);
+                                const myPlan = planes.find(p => p.usuarioId == data.id);
                                 if (myPlan) setAssignedPlan(myPlan);
                             });
 
                         fetchAPI('/rutinas', { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(rutinas => {
-                                const mergedRutinas = rutinas.map(r => ({ ...r, ...JSON.parse(localStorage.getItem(`pro_rutinas_${r.id}`) || '{}') }));
-                                const myRoutine = mergedRutinas.find(r => r.usuarioId == data.id);
+                                const myRoutine = rutinas.find(r => r.usuarioId == data.id);
                                 if (myRoutine) setAssignedRoutine(myRoutine);
                             });
                     }
