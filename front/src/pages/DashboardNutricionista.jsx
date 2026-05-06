@@ -3,7 +3,7 @@ import {
     Users, FileText, Dumbbell, Utensils, Activity, Edit2, Trash2, 
     Plus, X, LayoutDashboard, Bell, Settings, LogOut, 
     ChevronRight, ArrowUpRight, TrendingUp, Calendar, Info, CheckCircle, Clock, Search,
-    Scale, Zap, Target, Mail, User, ArrowLeft, Save
+    Scale, Zap, Target, Mail, User, ArrowLeft, Save, Menu
 } from 'lucide-react';
 import { 
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
@@ -16,7 +16,7 @@ import { fetchAPI } from '../api';
 const COLORS = {
     primary: '#0ea5e9', // Vibrant Cyan
     secondary: '#0f172a', // Deep Slate
-    accent: '#8b5cf6', // purple-500
+    accent: '#6366f1', // indigo-500
     warning: '#f59e0b', // amber-500
     danger: '#ef4444', // red-500
 };
@@ -110,7 +110,9 @@ const AdminModal = ({ isOpen, onClose, title, fields, initialData, onSave }) => 
                         ))}
                         <div className="col-span-2 flex gap-4 pt-6">
                             <button type="button" onClick={onClose} className="flex-1 px-8 py-4 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Cancelar</button>
-                            <button type="submit" className="flex-1 px-8 py-4 bg-health-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-health-500/20 hover:bg-health-600 transition-all">Crear Registro</button>
+                            <button type="submit" className="flex-1 px-8 py-4 bg-health-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-health-500/20 hover:bg-health-600 transition-all">
+                                {formData.id ? 'Guardar Cambios' : 'Crear Registro'}
+                            </button>
                         </div>
                     </form>
                 </motion.div>
@@ -173,7 +175,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
     };
 
     const togglePro = () => {
-        setEditedClient({ ...editedClient, isPro: !editedClient.isPro });
+        setEditedClient({ ...editedClient, pro: !editedClient.pro });
     };
 
     const handleSaveAll = () => {
@@ -264,7 +266,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                             {[
                                 { id: 'perfil', label: 'Biometría', icon: <Activity size={16} /> },
                                 { id: 'dieta', label: 'Nutrición', icon: <Utensils size={16} /> },
-                                { id: 'entreno', label: 'Entrenamiento', icon: <Dumbbell size={16} />, disabled: editedClient.tarifa === 'Basic' }
+                                { id: 'entreno', label: 'Entrenamiento', icon: <Dumbbell size={16} /> }
                             ].map(tab => (
                                 <button 
                                     key={tab.id}
@@ -451,6 +453,7 @@ const MetricInput = ({ label, value, onChange, name, type = "number", step = "0.
 const DashboardNutricionista = ({ onLogout }) => {
     const userEmail = localStorage.getItem('user');
     const [activeTab, setActiveTab] = useState('dashboard');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedClient, setSelectedClient] = useState(null);
@@ -469,7 +472,7 @@ const DashboardNutricionista = ({ onLogout }) => {
     const [searchRutinas, setSearchRutinas] = useState('');
     const [modalConfig, setModalConfig] = useState({ isOpen: false, type: null, data: null });
     const [deleteConfirm, setDeleteConfirm] = useState(null); 
-
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const filteredUsuarios = useMemo(() => {
         return usuarios.filter(u => 
             u.nombre?.toLowerCase().includes(searchUsuarios.toLowerCase()) || 
@@ -531,8 +534,8 @@ const DashboardNutricionista = ({ onLogout }) => {
             const planMethod = assignedPlan.id ? 'PUT' : 'POST';
             await fetchAPI(planEndpoint, { method: planMethod, headers, body: JSON.stringify(assignedPlan) });
 
-            // 3. Save/Update Training Routine (if pro)
-            if (editedClient.isPro) {
+            // 3. Save/Update Training Routine (if pro or present)
+            if (editedClient.pro || assignedRoutine.nombreRutina) {
                 const rutEndpoint = assignedRoutine.id ? `/rutinas/${assignedRoutine.id}` : '/rutinas';
                 const rutMethod = assignedRoutine.id ? 'PUT' : 'POST';
                 await fetchAPI(rutEndpoint, { method: rutMethod, headers, body: JSON.stringify(assignedRoutine) });
@@ -545,6 +548,20 @@ const DashboardNutricionista = ({ onLogout }) => {
 
     const handleGenericSave = async (formData) => {
         const type = modalConfig.type;
+
+        if (type === 'preferences') {
+            if (formData.theme) {
+                localStorage.setItem('theme', formData.theme);
+                if (formData.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            setModalConfig({ isOpen: false, type: null, data: null });
+            return;
+        }
+
         const isEdit = !!formData.id;
         const endpoint = `/${type}${isEdit ? `/${formData.id}` : ''}`;
         const method = isEdit ? 'PUT' : 'POST';
@@ -586,10 +603,24 @@ const DashboardNutricionista = ({ onLogout }) => {
     }
 
     return (
-        <div className="min-h-screen bg-surface-base dark:bg-slate-950 flex text-slate-900 dark:text-white transition-colors duration-500">
-            <AnimatePresence mode="wait">
-            {/* Sidebar refined - Deep Forest aesthetic */}
-            <aside className="w-80 fixed inset-y-0 left-0 bg-[#0a2e1f] dark:bg-[#051a12] border-r border-white/5 z-50 flex flex-col p-10 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.2)]">
+        <div className="min-h-screen bg-surface-base dark:bg-slate-950 flex text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden relative">
+            <AnimatePresence>
+                {isSidebarOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] lg:hidden"
+                    />
+                )}
+            </AnimatePresence>
+            {/* Sidebar refined - Premium Slate aesthetic */}
+            <aside className={`
+                w-80 fixed inset-y-0 left-0 bg-slate-900 dark:bg-slate-950 border-r border-white/5 z-[70] flex flex-col p-10 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.2)]
+                transition-transform duration-500 lg:translate-x-0
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
                 <div className="mb-20 flex items-center gap-4">
                     <div className="w-12 h-12 bg-health-500 rounded-2xl flex items-center justify-center shadow-lg shadow-health-500/20">
                         <Activity className="text-white" size={24} />
@@ -602,11 +633,12 @@ const DashboardNutricionista = ({ onLogout }) => {
                         { id: 'dashboard', label: 'Visión General', icon: <LayoutDashboard size={20} /> },
                         { id: 'usuarios', label: 'Clientes', icon: <Users size={20} /> },
                         { id: 'planes', label: 'Nutrición', icon: <FileText size={20} /> },
-                        { id: 'rutinas', label: 'Entrenamientos', icon: <Dumbbell size={20} /> }
+                        { id: 'rutinas', label: 'Entrenamientos', icon: <Dumbbell size={20} /> },
+                        { id: 'cuentas', label: 'Gestión de Cuentas', icon: <Settings size={20} /> }
                     ].map(item => (
                         <button 
                             key={item.id} 
-                            onClick={() => setActiveTab(item.id)} 
+                            onClick={() => { setActiveTab(item.id); setIsProfileOpen(false); setIsSidebarOpen(false); }} 
                             className={`w-full flex items-center gap-5 px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest transition-all ${activeTab === item.id ? 'bg-health-500 text-white shadow-2xl shadow-health-500/20' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}
                         >
                             {item.icon} {item.label}
@@ -620,24 +652,95 @@ const DashboardNutricionista = ({ onLogout }) => {
             </aside>
 
             {/* Main Area */}
-            <main className="flex-1 ml-80 p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
-                <header className="flex justify-between items-end mb-16 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-6 -m-6 mb-10 rounded-3xl border border-transparent dark:border-slate-800/50">
-                    <div>
-                        <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-3 block">Gabinete de Nutrición Deportiva</span>
-                        <h2 className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
+            <main className="flex-1 lg:ml-80 p-6 md:p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
+                <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-6 -m-6 mb-10 rounded-3xl border border-transparent dark:border-slate-800/50">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="lg:hidden p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm text-slate-400"
+                        >
+                            <Menu size={24} />
+                        </button>
+                        <div>
+                            <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-3 block">Gabinete de Nutrición Deportiva</span>
+                            <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
+                        </div>
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="text-right">
-                            <p className="text-xs font-black text-slate-900 dark:text-white">Nutr. Julián Cubero</p>
+                            <p className="text-xs font-black text-slate-900 dark:text-white">{(profile?.nombre || 'Nutr. FitLife').replace(/supabase/gi, '').trim() || 'Nutricionista Principal'}</p>
                             <p className="text-[9px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest mt-1">Nutricionista Principal</p>
                         </div>
-                        <div className="w-14 h-14 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-center text-health-500 dark:text-health-400 shadow-sm"><Activity size={28} /></div>
+                        <div className="relative">
+                            <button 
+                                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                className="w-14 h-14 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-center text-health-500 dark:text-health-400 shadow-sm hover:border-health-500 transition-all"
+                            >
+                                <User size={28} />
+                            </button>
+                            
+                            <AnimatePresence>
+                                {isProfileOpen && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        className="absolute right-0 mt-4 w-64 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-6 z-[100]"
+                                    >
+                                        <div className="space-y-4">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Mi Cuenta</p>
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'nutricionistas',
+                                                        title: 'Editar Mi Perfil',
+                                                        fields: [
+                                                            { name: 'nombre', label: 'Nombre Completo', type: 'text' },
+                                                            { name: 'email', label: 'Email Institucional', type: 'email' },
+                                                            { name: 'password', label: 'Nueva Contraseña', type: 'password' }
+                                                        ],
+                                                        data: profile
+                                                    });
+                                                    setIsProfileOpen(false);
+                                                }}
+                                                className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all text-left"
+                                            >
+                                                <User size={16} /> Editar Perfil
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'preferences',
+                                                        title: 'Preferencias del Sistema',
+                                                        fields: [
+                                                            { name: 'theme', label: 'Modo Visual', type: 'select', options: [{id:'dark', nombre:'Modo Oscuro'}, {id:'light', nombre:'Modo Claro'}] },
+                                                            { name: 'notifications', label: 'Notificaciones Push', type: 'select', options: [{id:'on', nombre:'Activadas'}, {id:'off', nombre:'Desactivadas'}] }
+                                                        ],
+                                                        data: { theme: localStorage.getItem('theme'), notifications: 'on' }
+                                                    });
+                                                    setIsProfileOpen(false);
+                                                }}
+                                                className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all text-left"
+                                            >
+                                                <Settings size={16} /> Preferencias
+                                            </button>
+                                            <div className="h-px bg-slate-50 dark:bg-slate-800 mx-2" />
+                                            <button onClick={onLogout} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 text-xs font-bold text-red-500 transition-all text-left">
+                                                <LogOut size={16} /> Cerrar Sesión
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </header>
 
                 {activeTab === 'dashboard' ? (
                     <div className="space-y-12">
-                        <div className="grid grid-cols-4 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             {[
                                 { l: 'Clientes', v: usuarios.length, i: <Users />, c: 'text-wellness-600' },
                                 { l: 'Planes Activos', v: planes.length, i: <FileText />, c: 'text-health-600' },
@@ -655,17 +758,19 @@ const DashboardNutricionista = ({ onLogout }) => {
                         <div className="grid lg:grid-cols-12 gap-10">
                             <div className="lg:col-span-8 card-premium p-12 bg-white dark:bg-slate-900 h-[500px] border-slate-100 dark:border-slate-800">
                                 <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-12 tracking-tighter">Actividad de Clientes</h3>
-                                <ResponsiveContainer width="100%" height="75%">
-                                    <AreaChart data={[
-                                        { n: 'Lun', v: 40 }, { n: 'Mar', v: 65 }, { n: 'Mie', v: 55 }, { n: 'Jue', v: 85 }, { n: 'Vie', v: 75 }, { n: 'Sab', v: 95 }, { n: 'Dom', v: 110 }
-                                    ]}>
-                                        <defs>
-                                            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#059669" stopOpacity={0.1}/><stop offset="95%" stopColor="#059669" stopOpacity={0}/></linearGradient>
-                                        </defs>
-                                        <XAxis dataKey="n" axisLine={false} tickLine={false} tickMargin={15} stroke="#64748b" fontSize={10} fontWeight={900} />
-                                        <Area type="monotone" dataKey="v" stroke="#059669" strokeWidth={5} fill="url(#g)" />
-                                    </AreaChart>
-                                </ResponsiveContainer>
+                                <div className="h-[300px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <AreaChart data={[
+                                            { n: 'Lun', v: 40 }, { n: 'Mar', v: 65 }, { n: 'Mie', v: 55 }, { n: 'Jue', v: 85 }, { n: 'Vie', v: 75 }, { n: 'Sab', v: 95 }, { n: 'Dom', v: 110 }
+                                        ]}>
+                                            <defs>
+                                                <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.1}/><stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/></linearGradient>
+                                            </defs>
+                                            <XAxis dataKey="n" axisLine={false} tickLine={false} tickMargin={15} stroke="#64748b" fontSize={10} fontWeight={900} />
+                                            <Area type="monotone" dataKey="v" stroke="#0ea5e9" strokeWidth={5} fill="url(#g)" />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
                             <div className="lg:col-span-4 card-premium p-10 bg-white dark:bg-slate-900 flex flex-col h-[500px] border-slate-100 dark:border-slate-800">
                                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-10 tracking-tighter">Últimas Acciones</h3>
@@ -680,6 +785,83 @@ const DashboardNutricionista = ({ onLogout }) => {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : activeTab === 'cuentas' ? (
+                    <div className="space-y-12">
+                        <div className="card-premium p-12 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                            <div className="flex justify-between items-center mb-12">
+                                <div>
+                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Administración de Cuentas</h3>
+                                    <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest">Control de acceso y perfiles de sistema</p>
+                                </div>
+                                <button 
+                                    onClick={() => {
+                                        setModalConfig({
+                                            isOpen: true,
+                                            type: 'nutricionistas',
+                                            title: 'Nueva Cuenta',
+                                            fields: [
+                                                { name: 'nombre', label: 'Nombre Completo', type: 'text' },
+                                                { name: 'email', label: 'Email', type: 'email' },
+                                                { name: 'password', label: 'Contraseña Provisional', type: 'password' }
+                                            ],
+                                            data: null
+                                        });
+                                    }}
+                                    className="px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center gap-3"
+                                >
+                                    <Plus size={18} /> Nueva Cuenta
+                                </button>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                {usuarios.slice(0, 8).map(u => (
+                                    <div key={u.id} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400"><User size={24} /></div>
+                                            <div>
+                                                <p className="font-black text-slate-900 dark:text-white">{u.nombre}</p>
+                                                <p className="text-[10px] text-slate-400 font-bold">{u.email}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-4">
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'usuarios',
+                                                        title: `Cambiar Password: ${u.nombre}`,
+                                                        fields: [
+                                                            { name: 'password', label: 'Nueva Contraseña', type: 'password' }
+                                                        ],
+                                                        data: u
+                                                    });
+                                                }}
+                                                className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                            >
+                                                Cambiar Pass
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'usuarios',
+                                                        title: `Editar Rol: ${u.nombre}`,
+                                                        fields: [
+                                                            { name: 'tarifa', label: 'Plan / Rol', type: 'select', options: [{id:'Basic', nombre:'Basic'}, {id:'Plus', nombre:'Plus'}, {id:'Premium', nombre:'Premium'}] }
+                                                        ],
+                                                        data: u
+                                                    });
+                                                }}
+                                                className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                            >
+                                                Editar Permisos
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -865,7 +1047,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                 onClose={() => setModalConfig({ isOpen: false, type: null, data: null })} 
                 title={modalConfig.title} 
                 fields={modalConfig.fields || []} 
-                initialData={null} 
+                initialData={modalConfig.data} 
                 onSave={handleGenericSave} 
             />
 
@@ -890,7 +1072,6 @@ const DashboardNutricionista = ({ onLogout }) => {
                     </motion.div>
                 </motion.div>
             )}
-            </AnimatePresence>
         </div>
     );
 };

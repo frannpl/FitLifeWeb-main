@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, Smartphone, Zap, TrendingUp, Users, Activity, Leaf, CheckCircle2, Dumbbell, Utensils } from 'lucide-react';
+import { ChevronRight, Smartphone, Zap, TrendingUp, Users, Activity, CheckCircle2, Dumbbell, Utensils, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Feature = ({ icon: Icon, title, desc, delay }) => (
@@ -55,7 +55,7 @@ const LandingPage = () => {
                         <motion.h1 
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-7xl md:text-[9.5rem] font-black text-slate-900 dark:text-white tracking-tighter mb-12 leading-[0.85] transition-colors duration-700 font-['Montserrat']"
+                            className="text-5xl md:text-[9.5rem] font-black text-slate-900 dark:text-white tracking-tighter mb-12 leading-[0.85] transition-colors duration-700 font-['Montserrat']"
                         >
                             Esculpe tu Cuerpo <br/>
                             <span className="text-gradient-health italic font-['Playfair_Display']">con Precisión.</span>
@@ -111,7 +111,7 @@ const LandingPage = () => {
 
                     <div className="grid md:grid-cols-3 gap-12">
                         <Feature 
-                            icon={Utensils} 
+                            icon={ShieldCheck} 
                             title="Bio-Nutrición" 
                             desc="Planes adaptativos y dinámicos diseñados con precisión por tu nutricionista. Ajustes en tiempo real basados en tu progreso metabólico y feedback."
                             delay={0.1}

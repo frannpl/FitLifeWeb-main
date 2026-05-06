@@ -11,7 +11,6 @@ import com.backend.fitlife.services.mappers.PlanMapper;
 
 @RestController
 @RequestMapping("/api/planes")
-@CrossOrigin(origins = "*")
 public class PlanController {
 
 	@Autowired

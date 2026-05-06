@@ -12,7 +12,6 @@ import com.backend.fitlife.persistence.entities.Nutricionista;
 
 @RestController
 @RequestMapping("/api/nutricionistas")
-@CrossOrigin(origins = "*")
 public class NutricionistaController {
 
 	@Autowired

@@ -100,11 +100,13 @@ public class DatabaseSeeder {
                 nutricionistaRepo.save(admin);
                 System.out.println("Base de datos: Cuenta de Nutricionista CREADA (admin123).");
             } else {
-                // Forzamos la contraseña por si acaso estaba mal en el SQL
+                // Parche de emergencia: si la contraseña no está encriptada, la encriptamos ahora
                 com.backend.fitlife.persistence.entities.Nutricionista admin = existing.get();
-                admin.setPassword(passwordEncoder.encode("admin123"));
-                nutricionistaRepo.save(admin);
-                System.out.println("Base de datos: Cuenta de Nutricionista ACTUALIZADA (admin123).");
+                if (admin.getPassword() == null || !admin.getPassword().startsWith("$2a$")) {
+                    admin.setPassword(passwordEncoder.encode("admin123"));
+                    nutricionistaRepo.save(admin);
+                    System.out.println("Base de datos: Cuenta de Nutricionista corregida a BCrypt.");
+                }
             }
         };
     }
@@ -123,10 +125,13 @@ public class DatabaseSeeder {
                 repository.save(u2);
                 System.out.println("Base de datos: Usuario Fran CREADO (admin123).");
             } else {
+                // Parche de emergencia para usuarios existentes
                 com.backend.fitlife.persistence.entities.Usuario u2 = existing.get();
-                u2.setPassword(passwordEncoder.encode("admin123"));
-                repository.save(u2);
-                System.out.println("Base de datos: Usuario Fran ACTUALIZADO (admin123).");
+                if (u2.getPassword() == null || !u2.getPassword().startsWith("$2a$")) {
+                    u2.setPassword(passwordEncoder.encode("admin123"));
+                    repository.save(u2);
+                    System.out.println("Base de datos: Usuario Fran corregido a BCrypt.");
+                }
             }
         };
     }

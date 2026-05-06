@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Activity, Calendar, Clock, ChevronRight, User, Settings, LogOut, 
-    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout
+    Activity, Calendar, Clock, ChevronRight, User, Users, Settings, LogOut, 
+    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout, Info, Utensils, MessageCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fetchAPI } from '../api';
@@ -31,16 +31,14 @@ const DashboardUsuario = () => {
                         fetchAPI('/planes', { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(planes => {
-                                const mergedPlanes = planes.map(p => ({ ...p, ...JSON.parse(localStorage.getItem(`pro_planes_${p.id}`) || '{}') }));
-                                const myPlan = mergedPlanes.find(p => p.usuarioId == data.id);
+                                const myPlan = planes.find(p => p.usuarioId == data.id);
                                 if (myPlan) setAssignedPlan(myPlan);
                             });
 
                         fetchAPI('/rutinas', { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(rutinas => {
-                                const mergedRutinas = rutinas.map(r => ({ ...r, ...JSON.parse(localStorage.getItem(`pro_rutinas_${r.id}`) || '{}') }));
-                                const myRoutine = mergedRutinas.find(r => r.usuarioId == data.id);
+                                const myRoutine = rutinas.find(r => r.usuarioId == data.id);
                                 if (myRoutine) setAssignedRoutine(myRoutine);
                             });
                     }
@@ -190,7 +188,7 @@ const DashboardUsuario = () => {
                         </div>
                     )}
 
-                    {assignedRoutine && displayProfile.tarifa !== 'Basic' ? (
+                    {assignedRoutine ? (
                         <motion.button onClick={() => setActiveTab('training')} whileHover={{ y: -5 }} className="card-premium p-8 bg-white dark:bg-slate-900 text-left group border-slate-100 dark:border-slate-800">
                             <div className="flex items-center justify-between mb-8">
                                 <div className="w-14 h-14 bg-wellness-50 dark:bg-wellness-900/20 text-wellness-600 dark:text-wellness-400 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-wellness-500 group-hover:text-white shadow-sm">
@@ -214,38 +212,61 @@ const DashboardUsuario = () => {
     );
 
     return (
-        <div className="min-h-screen bg-surface-base dark:bg-slate-950 pt-40 pb-20 px-8 flex flex-col transition-colors duration-500">
+        <div className="min-h-screen bg-surface-base dark:bg-slate-950 pt-32 pb-20 px-8 flex flex-col transition-colors duration-500">
             <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col min-h-0">
                 <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 gap-8">
                     <div>
-                        <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional</span>
-                        <h1 className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Mi Proceso.</h1>
+                        <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional FitLife</span>
+                        <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Hola, {(displayProfile.nombre || 'Usuario').split(' ')[0]}.</h1>
+                        <p className="mt-4 text-slate-400 dark:text-slate-500 font-medium max-w-lg">Aquí tienes el resumen de tu evolución biológica y tus próximos pasos.</p>
                     </div>
-                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
-                        {['overview', 'diet', 'training'].map(tab => {
-                            if (tab === 'training' && displayProfile.tarifa === 'Basic') return null;
-                            return (
-                                <button 
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === tab ? 'bg-slate-900 dark:bg-health-600 text-white shadow-lg shadow-slate-900/20 dark:shadow-health-900/20' : 'text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
-                                >
-                                    {tab === 'overview' ? 'General' : tab === 'diet' ? 'Dieta' : 'Entreno'}
-                                </button>
-                            );
-                        })}
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                        <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
+                            {['overview', 'diet', 'training'].map(tab => {
+                                return (
+                                    <button 
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-health-500 text-white shadow-lg shadow-health-500/20' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
+                                    >
+                                        {tab === 'overview' ? 'Resumen' : tab === 'diet' ? 'Nutrición' : 'Entreno'}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <a 
+                            href="https://wa.me/34618555371?text=Hola,%20tengo%20una%20duda%20sobre%20mi%20plan." 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-green-500/20 active:scale-95 text-[10px] uppercase tracking-widest"
+                        >
+                            <MessageCircle size={16} /> Contactar WhatsApp
+                        </a>
                     </div>
                 </header>
 
                 <div className="flex-1 min-h-0">
-                    {activeTab === 'overview' && renderOverview()}
+                    {activeTab === 'overview' && (
+                        <>
+                            {(!assignedPlan && !assignedRoutine) && (
+                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-12 p-8 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 rounded-4xl flex items-center gap-8">
+                                    <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm"><Info size={32} /></div>
+                                    <div>
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">¡Bienvenido a FitLife Web!</h3>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Tu nutricionista está preparando tu primer plan personalizado. En cuanto esté listo, aparecerá aquí automáticamente.</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                            {renderOverview()}
+                        </>
+                    )}
                     {(activeTab === 'diet' || activeTab === 'training') && (
                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="card-premium p-12 bg-white dark:bg-slate-900 h-full overflow-y-auto custom-scrollbar border-slate-100 dark:border-slate-800">
                             <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-8">
-                                {activeTab === 'diet' ? assignedPlan?.nombrePlan : assignedRoutine?.nombreRutina}
+                                {activeTab === 'diet' ? (assignedPlan?.nombrePlan || 'Plan Nutricional') : (assignedRoutine?.nombreRutina || 'Rutina de Entrenamiento')}
                             </h2>
                             <div className="prose dark:prose-invert prose-slate max-w-none text-lg leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-line">
-                                {activeTab === 'diet' ? assignedPlan?.descripcion : assignedRoutine?.descripcion}
+                                {activeTab === 'diet' ? (assignedPlan?.descripcion || 'Tu nutricionista aún no ha redactado el detalle de este plan.') : (assignedRoutine?.descripcion || 'Tu nutricionista aún no ha redactado el detalle de esta rutina.')}
                             </div>
                         </motion.div>
                     )}

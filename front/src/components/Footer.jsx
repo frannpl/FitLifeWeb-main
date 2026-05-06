@@ -10,7 +10,7 @@ const Footer = () => {
                         <div className="w-10 h-10 bg-health-500 rounded-2xl flex items-center justify-center shadow-lg shadow-health-500/20">
                             <Activity size={20} className="text-white" />
                         </div>
-                        <span>FitLife<span className="text-health-500">Pro</span></span>
+                        <span>FitLife<span className="text-health-500">Web</span></span>
                     </div>
                     <p className="text-sm font-medium leading-relaxed mb-10 max-w-xs">
                         Plataforma de ingeniería nutricional de alto rendimiento para el máximo bio-rendimiento físico.
@@ -55,7 +55,7 @@ const Footer = () => {
             </div>
             <div className="max-w-7xl mx-auto px-8 mt-24 pt-12 border-t border-slate-50 dark:border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-8">
                 <p className="text-[10px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest leading-loose">
-                    &copy; 2024 FitLife Pro Nutrition Systems. Todos los derechos reservados.
+                    &copy; 2024 FitLife Web Nutrition Systems. Todos los derechos reservados.
                 </p>
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                     <div className="flex gap-8">

@@ -11,7 +11,6 @@ import com.backend.fitlife.services.mappers.RutinaEjercicioMapper;
 
 @RestController
 @RequestMapping("/api/rutina-ejercicio")
-@CrossOrigin(origins = "*")
 public class RutinaEjercicioController {
 
 	@Autowired

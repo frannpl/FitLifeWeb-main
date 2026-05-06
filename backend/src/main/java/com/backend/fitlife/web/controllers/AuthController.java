@@ -23,7 +23,6 @@ import com.backend.fitlife.services.dto.UsuarioDTO;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
