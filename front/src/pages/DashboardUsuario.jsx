@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Activity, Calendar, Clock, ChevronRight, User, Settings, LogOut, 
+    Activity, Calendar, Clock, ChevronRight, User, Users, Settings, LogOut, 
     TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout
 } from 'lucide-react';
 import { motion } from 'framer-motion';
