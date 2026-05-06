@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, Smartphone, Zap, TrendingUp, Users, Activity, Leaf, CheckCircle2, Dumbbell, Utensils } from 'lucide-react';
+import { ChevronRight, Smartphone, Zap, TrendingUp, Users, Activity, CheckCircle2, Dumbbell, Utensils, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Feature = ({ icon: Icon, title, desc, delay }) => (
@@ -111,7 +111,7 @@ const LandingPage = () => {
 
                     <div className="grid md:grid-cols-3 gap-12">
                         <Feature 
-                            icon={Utensils} 
+                            icon={ShieldCheck} 
                             title="Bio-Nutrición" 
                             desc="Planes adaptativos y dinámicos diseñados con precisión por tu nutricionista. Ajustes en tiempo real basados en tu progreso metabólico y feedback."
                             delay={0.1}

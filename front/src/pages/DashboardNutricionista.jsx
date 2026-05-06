@@ -16,7 +16,7 @@ import { fetchAPI } from '../api';
 const COLORS = {
     primary: '#0ea5e9', // Vibrant Cyan
     secondary: '#0f172a', // Deep Slate
-    accent: '#8b5cf6', // purple-500
+    accent: '#6366f1', // indigo-500
     warning: '#f59e0b', // amber-500
     danger: '#ef4444', // red-500
 };
@@ -469,7 +469,7 @@ const DashboardNutricionista = ({ onLogout }) => {
     const [searchRutinas, setSearchRutinas] = useState('');
     const [modalConfig, setModalConfig] = useState({ isOpen: false, type: null, data: null });
     const [deleteConfirm, setDeleteConfirm] = useState(null); 
-
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const filteredUsuarios = useMemo(() => {
         return usuarios.filter(u => 
             u.nombre?.toLowerCase().includes(searchUsuarios.toLowerCase()) || 
@@ -588,8 +588,8 @@ const DashboardNutricionista = ({ onLogout }) => {
     return (
         <div className="min-h-screen bg-surface-base dark:bg-slate-950 flex text-slate-900 dark:text-white transition-colors duration-500">
             <AnimatePresence mode="wait">
-            {/* Sidebar refined - Deep Forest aesthetic */}
-            <aside className="w-80 fixed inset-y-0 left-0 bg-[#0a2e1f] dark:bg-[#051a12] border-r border-white/5 z-50 flex flex-col p-10 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.2)]">
+            {/* Sidebar refined - Premium Slate aesthetic */}
+            <aside className="w-80 fixed inset-y-0 left-0 bg-slate-900 dark:bg-slate-950 border-r border-white/5 z-50 flex flex-col p-10 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.2)]">
                 <div className="mb-20 flex items-center gap-4">
                     <div className="w-12 h-12 bg-health-500 rounded-2xl flex items-center justify-center shadow-lg shadow-health-500/20">
                         <Activity className="text-white" size={24} />
@@ -602,7 +602,8 @@ const DashboardNutricionista = ({ onLogout }) => {
                         { id: 'dashboard', label: 'Visión General', icon: <LayoutDashboard size={20} /> },
                         { id: 'usuarios', label: 'Clientes', icon: <Users size={20} /> },
                         { id: 'planes', label: 'Nutrición', icon: <FileText size={20} /> },
-                        { id: 'rutinas', label: 'Entrenamientos', icon: <Dumbbell size={20} /> }
+                        { id: 'rutinas', label: 'Entrenamientos', icon: <Dumbbell size={20} /> },
+                        { id: 'cuentas', label: 'Gestión de Cuentas', icon: <Settings size={20} /> }
                     ].map(item => (
                         <button 
                             key={item.id} 
@@ -628,10 +629,42 @@ const DashboardNutricionista = ({ onLogout }) => {
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="text-right">
-                            <p className="text-xs font-black text-slate-900 dark:text-white">Nutr. Julián Cubero</p>
+                            <p className="text-xs font-black text-slate-900 dark:text-white">{profile?.nombre || 'Nutr. FitLife'}</p>
                             <p className="text-[9px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest mt-1">Nutricionista Principal</p>
                         </div>
-                        <div className="w-14 h-14 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-center text-health-500 dark:text-health-400 shadow-sm"><Activity size={28} /></div>
+                        <div className="relative">
+                            <button 
+                                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                className="w-14 h-14 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-center text-health-500 dark:text-health-400 shadow-sm hover:border-health-500 transition-all"
+                            >
+                                <User size={28} />
+                            </button>
+                            
+                            <AnimatePresence>
+                                {isProfileOpen && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        className="absolute right-0 mt-4 w-64 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-6 z-[100]"
+                                    >
+                                        <div className="space-y-4">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Mi Cuenta</p>
+                                            <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                                                <User size={16} /> Editar Perfil
+                                            </button>
+                                            <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                                                <Settings size={16} /> Preferencias
+                                            </button>
+                                            <div className="h-px bg-slate-50 dark:bg-slate-800 mx-2" />
+                                            <button onClick={onLogout} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 text-xs font-bold text-red-500 transition-all text-left">
+                                                <LogOut size={16} /> Cerrar Sesión
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </header>
 
@@ -660,10 +693,10 @@ const DashboardNutricionista = ({ onLogout }) => {
                                         { n: 'Lun', v: 40 }, { n: 'Mar', v: 65 }, { n: 'Mie', v: 55 }, { n: 'Jue', v: 85 }, { n: 'Vie', v: 75 }, { n: 'Sab', v: 95 }, { n: 'Dom', v: 110 }
                                     ]}>
                                         <defs>
-                                            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#059669" stopOpacity={0.1}/><stop offset="95%" stopColor="#059669" stopOpacity={0}/></linearGradient>
+                                            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.1}/><stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/></linearGradient>
                                         </defs>
                                         <XAxis dataKey="n" axisLine={false} tickLine={false} tickMargin={15} stroke="#64748b" fontSize={10} fontWeight={900} />
-                                        <Area type="monotone" dataKey="v" stroke="#059669" strokeWidth={5} fill="url(#g)" />
+                                        <Area type="monotone" dataKey="v" stroke="#0ea5e9" strokeWidth={5} fill="url(#g)" />
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
@@ -680,6 +713,38 @@ const DashboardNutricionista = ({ onLogout }) => {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : activeTab === 'cuentas' ? (
+                    <div className="space-y-12">
+                        <div className="card-premium p-12 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                            <div className="flex justify-between items-center mb-12">
+                                <div>
+                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Administración de Cuentas</h3>
+                                    <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest">Control de acceso y perfiles de sistema</p>
+                                </div>
+                                <button className="px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center gap-3">
+                                    <Plus size={18} /> Nueva Cuenta Staff
+                                </button>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                {usuarios.slice(0, 5).map(u => (
+                                    <div key={u.id} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400"><User size={24} /></div>
+                                            <div>
+                                                <p className="font-black text-slate-900 dark:text-white">{u.nombre}</p>
+                                                <p className="text-[10px] text-slate-400 font-bold">{u.email}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-4">
+                                            <button className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all">Cambiar Pass</button>
+                                            <button className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all">Editar Permisos</button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

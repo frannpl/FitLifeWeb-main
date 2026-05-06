@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Leaf, Menu, X, Activity, LogOut, Sun, Moon } from 'lucide-react';
+import { User, Menu, X, Activity, LogOut, Sun, Moon, Settings } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
@@ -8,6 +8,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [authModalOpen, setAuthModalOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -38,7 +39,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                 <div className="container mx-auto px-6 flex justify-between items-center">
                     <div onClick={() => navigate('/')} className="flex items-center gap-2 font-black text-2xl tracking-tighter cursor-pointer group">
                         <div className="w-9 h-9 bg-health-500 rounded-xl flex items-center justify-center transform group-hover:rotate-6 transition-transform shadow-lg shadow-health-500/20">
-                            <Leaf size={20} className="text-white" />
+                            <Activity size={20} className="text-white" />
                         </div>
                         <span className={headerTextColor}>FitLife<span className="text-health-500">Pro</span></span>
                     </div>
@@ -63,14 +64,39 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                                     </>
                                 )}
 
-                                <div className="flex items-center gap-5 ml-6 pl-6 border-l border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-5 ml-6 pl-6 border-l border-slate-100 dark:border-slate-800 relative">
                                     <div className="flex flex-col items-end">
                                         <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest">Bienvenido</span>
                                         <span className={headerTextColor}>{user}</span>
                                     </div>
-                                    <button onClick={onLogout} className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 rounded-xl transition-all border border-slate-100 dark:border-slate-800">
-                                        <LogOut size={18} />
+                                    <button 
+                                        onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                        className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:border-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                    >
+                                        <User size={18} className="text-slate-400 dark:text-slate-500" />
                                     </button>
+                                    
+                                    <AnimatePresence>
+                                        {isProfileOpen && (
+                                            <motion.div 
+                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                className="absolute right-0 top-full mt-4 w-64 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-6 z-[100]"
+                                            >
+                                                <div className="space-y-4">
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Mi Cuenta</p>
+                                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'); setIsProfileOpen(false); }} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                                                        <Settings size={16} /> Mis Preferencias
+                                                    </button>
+                                                    <div className="h-px bg-slate-50 dark:bg-slate-800 mx-2" />
+                                                    <button onClick={onLogout} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 text-xs font-bold text-red-500 transition-all text-left">
+                                                        <LogOut size={16} /> Cerrar Sesión
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </>
                         ) : (
