@@ -21,7 +21,6 @@ import com.backend.fitlife.services.mappers.ComidaMapper;
 
 @RestController
 @RequestMapping("/api/comidas")
-@CrossOrigin(origins = "*")
 public class ComidaController {
 
     @Autowired
