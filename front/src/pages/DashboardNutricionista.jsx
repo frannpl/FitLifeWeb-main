@@ -3,7 +3,7 @@ import {
     Users, FileText, Dumbbell, Utensils, Activity, Edit2, Trash2, 
     Plus, X, LayoutDashboard, Bell, Settings, LogOut, 
     ChevronRight, ArrowUpRight, TrendingUp, Calendar, Info, CheckCircle, Clock, Search,
-    Scale, Zap, Target, Mail, User, ArrowLeft, Save
+    Scale, Zap, Target, Mail, User, ArrowLeft, Save, Menu
 } from 'lucide-react';
 import { 
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
