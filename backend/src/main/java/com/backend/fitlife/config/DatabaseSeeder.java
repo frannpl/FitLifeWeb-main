@@ -99,12 +99,6 @@ public class DatabaseSeeder {
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 nutricionistaRepo.save(admin);
                 System.out.println("Base de datos: Cuenta de Nutricionista CREADA (admin123).");
-            } else {
-                // Forzamos la contraseña por si acaso estaba mal en el SQL
-                com.backend.fitlife.persistence.entities.Nutricionista admin = existing.get();
-                admin.setPassword(passwordEncoder.encode("admin123"));
-                nutricionistaRepo.save(admin);
-                System.out.println("Base de datos: Cuenta de Nutricionista ACTUALIZADA (admin123).");
             }
         };
     }
@@ -122,11 +116,6 @@ public class DatabaseSeeder {
                 u2.setPro(true);
                 repository.save(u2);
                 System.out.println("Base de datos: Usuario Fran CREADO (admin123).");
-            } else {
-                com.backend.fitlife.persistence.entities.Usuario u2 = existing.get();
-                u2.setPassword(passwordEncoder.encode("admin123"));
-                repository.save(u2);
-                System.out.println("Base de datos: Usuario Fran ACTUALIZADO (admin123).");
             }
         };
     }
