@@ -5,6 +5,8 @@ import com.backend.fitlife.persistence.enums.ComidaHoraria;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -35,6 +37,7 @@ public class PlanComida {
 	
 	private int cantidad;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "comidas_horarias", length = 20)
 	private ComidaHoraria comidasHorarias; 
 }
