@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Activity, Calendar, Clock, ChevronRight, User, Users, Settings, LogOut, 
-    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout, Info, Utensils
+    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout, Info, Utensils, MessageCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fetchAPI } from '../api';
@@ -183,7 +183,7 @@ const DashboardUsuario = () => {
                         </div>
                     )}
 
-                    {assignedRoutine && displayProfile.tarifa !== 'Basic' ? (
+                    {assignedRoutine ? (
                         <motion.button onClick={() => setActiveTab('training')} whileHover={{ y: -5 }} className="card-premium p-8 bg-white dark:bg-slate-900 text-left group border-slate-100 dark:border-slate-800">
                             <div className="flex items-center justify-between mb-8">
                                 <div className="w-14 h-14 bg-wellness-50 dark:bg-wellness-900/20 text-wellness-600 dark:text-wellness-400 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-wellness-500 group-hover:text-white shadow-sm">
@@ -215,19 +215,28 @@ const DashboardUsuario = () => {
                         <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Hola, {(displayProfile.nombre || 'Usuario').split(' ')[0]}.</h1>
                         <p className="mt-4 text-slate-400 dark:text-slate-500 font-medium max-w-lg">Aquí tienes el resumen de tu evolución biológica y tus próximos pasos.</p>
                     </div>
-                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
-                        {['overview', 'diet', 'training'].map(tab => {
-                            if (tab === 'training' && displayProfile.tarifa === 'Basic') return null;
-                            return (
-                                <button 
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === tab ? 'bg-slate-900 dark:bg-health-600 text-white shadow-lg shadow-slate-900/20 dark:shadow-health-900/20' : 'text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
-                                >
-                                    {tab === 'overview' ? 'General' : tab === 'diet' ? 'Dieta' : 'Entreno'}
-                                </button>
-                            );
-                        })}
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                        <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
+                            {['overview', 'diet', 'training'].map(tab => {
+                                return (
+                                    <button 
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-health-500 text-white shadow-lg shadow-health-500/20' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
+                                    >
+                                        {tab === 'overview' ? 'Resumen' : tab === 'diet' ? 'Nutrición' : 'Entreno'}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <a 
+                            href="https://wa.me/34618555371?text=Hola,%20tengo%20una%20duda%20sobre%20mi%20plan." 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-green-500/20 active:scale-95 text-[10px] uppercase tracking-widest"
+                        >
+                            <MessageCircle size={16} /> Contactar WhatsApp
+                        </a>
                     </div>
                 </header>
 
