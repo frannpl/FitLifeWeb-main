@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { 
     Users, FileText, Dumbbell, Utensils, Activity, Edit2, Trash2, 
     Plus, X, LayoutDashboard, Bell, Settings, LogOut, 
@@ -451,9 +452,18 @@ const MetricInput = ({ label, value, onChange, name, type = "number", step = "0.
 );
 
 const DashboardNutricionista = ({ onLogout }) => {
+    const location = useLocation();
     const userEmail = localStorage.getItem('user');
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('tab');
+        if (tab && ['dashboard', 'usuarios', 'planes', 'rutinas', 'cuentas'].includes(tab)) {
+            setActiveTab(tab);
+        }
+    }, [location.search]);
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedClient, setSelectedClient] = useState(null);
@@ -1001,6 +1011,61 @@ const DashboardNutricionista = ({ onLogout }) => {
                                             ))}
                                         </tbody>
                                     </>
+                                ) : activeTab === 'cuentas' ? (
+                                    <div className="p-8">
+                                        <div className="grid md:grid-cols-2 gap-12">
+                                            <div className="card-premium p-10 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                                                <h4 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-8 border-b border-slate-50 dark:border-slate-800 pb-6 flex items-center gap-4">
+                                                    <User className="text-health-500" size={24} /> Mi Perfil Profesional
+                                                </h4>
+                                                <div className="space-y-6">
+                                                    <div className="group">
+                                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Nombre del Nutricionista</label>
+                                                        <div className="p-5 bg-slate-50 dark:bg-slate-800 rounded-2xl font-bold text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
+                                                            {profile?.nombre || 'Julián Cubero'}
+                                                        </div>
+                                                    </div>
+                                                    <div className="group">
+                                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 px-1">Correo Electrónico</label>
+                                                        <div className="p-5 bg-slate-50 dark:bg-slate-800 rounded-2xl font-bold text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
+                                                            {userEmail}
+                                                        </div>
+                                                    </div>
+                                                    <div className="group pt-4">
+                                                        <button className="w-full flex items-center justify-center gap-3 p-5 bg-slate-900 text-white font-black rounded-2xl hover:bg-health-500 transition-all text-[10px] uppercase tracking-widest shadow-xl">
+                                                            <Save size={16} /> Guardar Perfil
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-8">
+                                                <div className="card-premium p-8 bg-health-500 text-white border-none shadow-2xl shadow-health-500/20">
+                                                    <h4 className="text-lg font-black uppercase tracking-widest mb-6 opacity-80">Estado del Sistema</h4>
+                                                    <div className="space-y-4">
+                                                        <div className="flex justify-between items-center py-3 border-b border-white/10">
+                                                            <span className="font-bold opacity-80">Clientes Activos</span>
+                                                            <span className="text-2xl font-black">{usuarios.length}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center py-3 border-b border-white/10">
+                                                            <span className="font-bold opacity-80">Planes en Redacción</span>
+                                                            <span className="text-2xl font-black">{planes.length}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center py-3">
+                                                            <span className="font-bold opacity-80">Sesión Iniciada como</span>
+                                                            <span className="font-black">Administrador</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="card-premium p-8 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Acciones de Seguridad</h4>
+                                                    <button onClick={onLogout} className="w-full flex items-center justify-between p-5 rounded-2xl bg-red-50 dark:bg-red-900/10 text-red-500 font-bold hover:bg-red-100 transition-all">
+                                                        <span className="flex items-center gap-3"><LogOut size={18} /> Cerrar Sesión Segura</span>
+                                                        <ChevronRight size={16} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 ) : (
                                     <>
                                         <thead>

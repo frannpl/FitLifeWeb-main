@@ -86,7 +86,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                                             >
                                                 <div className="space-y-4">
                                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Mi Cuenta</p>
-                                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'); setIsProfileOpen(false); }} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista?tab=cuentas' : '/dashboard?tab=settings'); setIsProfileOpen(false); }} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
                                                         <Settings size={16} /> Mis Preferencias
                                                     </button>
                                                     <div className="h-px bg-slate-50 dark:bg-slate-800 mx-2" />

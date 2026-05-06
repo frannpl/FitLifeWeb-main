@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Activity, Calendar, Clock, ChevronRight, User, Users, Settings, LogOut, 
-    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout, Info, Utensils, MessageCircle
+    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout, Info, Utensils, MessageCircle,
+    Bell, Shield, Moon, Sun, Globe, Mail, Phone, Save
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import { fetchAPI } from '../api';
 
 const DashboardUsuario = () => {
+    const location = useLocation();
     const userStr = localStorage.getItem('user');
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'diet', 'training'
+    const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'diet', 'training', 'settings'
+    const [saveStatus, setSaveStatus] = useState(null);
 
     const [assignedPlan, setAssignedPlan] = useState(null);
     const [assignedRoutine, setAssignedRoutine] = useState(null);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('tab');
+        if (tab && ['overview', 'diet', 'training', 'settings'].includes(tab)) {
+            setActiveTab(tab);
+        }
+    }, [location.search]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -47,6 +59,31 @@ const DashboardUsuario = () => {
                 .catch(err => { console.error(err); setLoading(false); });
         } else { setLoading(false); }
     }, [userStr]);
+
+    const handleUpdateProfile = async (e) => {
+        e.preventDefault();
+        setSaveStatus('loading');
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetchAPI(`/usuarios/${profile.id}`, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profile)
+            });
+            if (res.ok) {
+                setSaveStatus('success');
+                setTimeout(() => setSaveStatus(null), 3000);
+            } else {
+                setSaveStatus('error');
+            }
+        } catch (err) {
+            console.error(err);
+            setSaveStatus('error');
+        }
+    };
 
     const displayProfile = profile || { pesoActual: 72, altura: 1.75, edad: 28, nombre: userStr || 'Usuario' };
 
@@ -211,65 +248,155 @@ const DashboardUsuario = () => {
         </div>
     );
 
+    const renderSettings = () => (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid lg:grid-cols-12 gap-8 h-full">
+            <div className="lg:col-span-4 space-y-6">
+                <div className="card-premium p-8 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                    <div className="flex flex-col items-center text-center mb-8">
+                        <div className="w-24 h-24 rounded-3xl bg-health-50 dark:bg-health-900/20 flex items-center justify-center text-health-500 mb-4 border border-health-100 dark:border-health-800/30">
+                            <User size={48} />
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{profile?.nombre}</h3>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{profile?.email}</p>
+                    </div>
+                    <div className="space-y-2">
+                        {[
+                            { icon: <Shield size={16} />, label: 'Privacidad y Seguridad' },
+                            { icon: <Bell size={16} />, label: 'Notificaciones' },
+                            { icon: <Globe size={16} />, label: 'Idioma y Región' }
+                        ].map(item => (
+                            <button key={item.label} className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold text-xs transition-all text-left">
+                                {item.icon} {item.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <div className="lg:col-span-8">
+                <div className="card-premium p-10 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                    <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-50 dark:border-slate-800">
+                        <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Mi Perfil Profesional</h3>
+                        {saveStatus === 'success' && <span className="text-health-500 text-[10px] font-black uppercase animate-pulse">¡Cambios Guardados!</span>}
+                    </div>
+
+                    <form onSubmit={handleUpdateProfile} className="space-y-8">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Completo</label>
+                                <input 
+                                    value={profile?.nombre || ''} 
+                                    onChange={e => setProfile({...profile, nombre: e.target.value})}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Correo Electrónico</label>
+                                <input 
+                                    disabled
+                                    value={profile?.email || ''} 
+                                    className="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-400 dark:text-slate-500 font-bold opacity-70 cursor-not-allowed"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Peso (kg)</label>
+                                <input 
+                                    type="number" step="0.1"
+                                    value={profile?.pesoActual || ''} 
+                                    onChange={e => setProfile({...profile, pesoActual: parseFloat(e.target.value)})}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Altura (m)</label>
+                                <input 
+                                    type="number" step="0.01"
+                                    value={profile?.altura || ''} 
+                                    onChange={e => setProfile({...profile, altura: parseFloat(e.target.value)})}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Edad</label>
+                                <input 
+                                    type="number"
+                                    value={profile?.edad || ''} 
+                                    onChange={e => setProfile({...profile, edad: parseInt(e.target.value)})}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="pt-6">
+                            <button 
+                                type="submit" 
+                                disabled={saveStatus === 'loading'}
+                                className="px-10 py-5 bg-health-500 hover:bg-health-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-health-500/20 flex items-center gap-3 text-[10px] uppercase tracking-widest disabled:opacity-50"
+                            >
+                                <Save size={18} /> {saveStatus === 'loading' ? 'Guardando...' : 'Guardar Preferencias'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </motion.div>
+    );
+
     return (
-        <div className="min-h-screen bg-surface-base dark:bg-slate-950 pt-32 pb-20 px-8 flex flex-col transition-colors duration-500">
+        <div className="min-h-screen bg-surface-base dark:bg-slate-950 pt-40 pb-20 px-8 flex flex-col transition-colors duration-500">
             <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col min-h-0">
                 <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 gap-8">
                     <div>
-                        <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional FitLife</span>
-                        <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Hola, {(displayProfile.nombre || 'Usuario').split(' ')[0]}.</h1>
-                        <p className="mt-4 text-slate-400 dark:text-slate-500 font-medium max-w-lg">Aquí tienes el resumen de tu evolución biológica y tus próximos pasos.</p>
+                        <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional</span>
+                        <h1 className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Mi Proceso.</h1>
                     </div>
-                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-                        <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
-                            {['overview', 'diet', 'training'].map(tab => {
-                                return (
-                                    <button 
-                                        key={tab}
-                                        onClick={() => setActiveTab(tab)}
-                                        className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-health-500 text-white shadow-lg shadow-health-500/20' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
-                                    >
-                                        {tab === 'overview' ? 'Resumen' : tab === 'diet' ? 'Nutrición' : 'Entreno'}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                        <a 
-                            href="https://wa.me/34618555371?text=Hola,%20tengo%20una%20duda%20sobre%20mi%20plan." 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-green-500/20 active:scale-95 text-[10px] uppercase tracking-widest"
-                        >
-                            <MessageCircle size={16} /> Contactar WhatsApp
-                        </a>
+                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
+                        {['overview', 'diet', 'training', 'settings'].map(tab => {
+                            if (tab === 'training' && profile?.tarifa === 'Basic') return null;
+                            return (
+                                <button 
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === tab ? 'bg-slate-900 dark:bg-health-600 text-white shadow-lg shadow-slate-900/20 dark:shadow-health-900/20' : 'text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                                >
+                                    {tab === 'overview' ? 'General' : tab === 'diet' ? 'Dieta' : tab === 'training' ? 'Entreno' : 'Ajustes'}
+                                </button>
+                            );
+                        })}
                     </div>
                 </header>
 
                 <div className="flex-1 min-h-0">
-                    {activeTab === 'overview' && (
-                        <>
-                            {(!assignedPlan && !assignedRoutine) && (
-                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-12 p-8 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 rounded-4xl flex items-center gap-8">
-                                    <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm"><Info size={32} /></div>
-                                    <div>
-                                        <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">¡Bienvenido a FitLife Web!</h3>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Tu nutricionista está preparando tu primer plan personalizado. En cuanto esté listo, aparecerá aquí automáticamente.</p>
+                    <AnimatePresence mode="wait">
+                        {activeTab === 'overview' && (
+                            <motion.div key="overview" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                                {(!assignedPlan && !assignedRoutine) && (
+                                    <div className="mb-12 p-8 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 rounded-4xl flex items-center gap-8">
+                                        <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm"><Info size={32} /></div>
+                                        <div>
+                                            <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">¡Bienvenido a FitLife Web!</h3>
+                                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Tu nutricionista está preparando tu primer plan personalizado. En cuanto esté listo, aparecerá aquí automáticamente.</p>
+                                        </div>
                                     </div>
-                                </motion.div>
-                            )}
-                            {renderOverview()}
-                        </>
-                    )}
-                    {(activeTab === 'diet' || activeTab === 'training') && (
-                        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="card-premium p-12 bg-white dark:bg-slate-900 h-full overflow-y-auto custom-scrollbar border-slate-100 dark:border-slate-800">
-                            <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-8">
-                                {activeTab === 'diet' ? (assignedPlan?.nombrePlan || 'Plan Nutricional') : (assignedRoutine?.nombreRutina || 'Rutina de Entrenamiento')}
-                            </h2>
-                            <div className="prose dark:prose-invert prose-slate max-w-none text-lg leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-line">
-                                {activeTab === 'diet' ? (assignedPlan?.descripcion || 'Tu nutricionista aún no ha redactado el detalle de este plan.') : (assignedRoutine?.descripcion || 'Tu nutricionista aún no ha redactado el detalle de esta rutina.')}
-                            </div>
-                        </motion.div>
-                    )}
+                                )}
+                                {renderOverview()}
+                            </motion.div>
+                        )}
+                        {activeTab === 'settings' && <div key="settings">{renderSettings()}</div>}
+                        {(activeTab === 'diet' || activeTab === 'training') && (
+                            <motion.div key="content" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="card-premium p-12 bg-white dark:bg-slate-900 h-full overflow-y-auto custom-scrollbar border-slate-100 dark:border-slate-800">
+                                <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-8">
+                                    {activeTab === 'diet' ? (assignedPlan?.nombrePlan || 'Plan Nutricional') : (assignedRoutine?.nombreRutina || 'Rutina de Entrenamiento')}
+                                </h2>
+                                <div className="prose dark:prose-invert prose-slate max-w-none text-lg leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-line">
+                                    {activeTab === 'diet' ? (assignedPlan?.descripcion || 'Tu nutricionista aún no ha redactado el detalle de este plan.') : (assignedRoutine?.descripcion || 'Tu nutricionista aún no ha redactado el detalle de esta rutina.')}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
