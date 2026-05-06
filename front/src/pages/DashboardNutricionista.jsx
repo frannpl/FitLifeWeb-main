@@ -110,7 +110,9 @@ const AdminModal = ({ isOpen, onClose, title, fields, initialData, onSave }) => 
                         ))}
                         <div className="col-span-2 flex gap-4 pt-6">
                             <button type="button" onClick={onClose} className="flex-1 px-8 py-4 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Cancelar</button>
-                            <button type="submit" className="flex-1 px-8 py-4 bg-health-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-health-500/20 hover:bg-health-600 transition-all">Crear Registro</button>
+                            <button type="submit" className="flex-1 px-8 py-4 bg-health-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-health-500/20 hover:bg-health-600 transition-all">
+                                {formData.id ? 'Guardar Cambios' : 'Crear Registro'}
+                            </button>
                         </div>
                     </form>
                 </motion.div>
@@ -545,6 +547,20 @@ const DashboardNutricionista = ({ onLogout }) => {
 
     const handleGenericSave = async (formData) => {
         const type = modalConfig.type;
+
+        if (type === 'preferences') {
+            if (formData.theme) {
+                localStorage.setItem('theme', formData.theme);
+                if (formData.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            setModalConfig({ isOpen: false, type: null, data: null });
+            return;
+        }
+
         const isEdit = !!formData.id;
         const endpoint = `/${type}${isEdit ? `/${formData.id}` : ''}`;
         const method = isEdit ? 'PUT' : 'POST';
@@ -607,7 +623,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                     ].map(item => (
                         <button 
                             key={item.id} 
-                            onClick={() => setActiveTab(item.id)} 
+                            onClick={() => { setActiveTab(item.id); setIsProfileOpen(false); }} 
                             className={`w-full flex items-center gap-5 px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest transition-all ${activeTab === item.id ? 'bg-health-500 text-white shadow-2xl shadow-health-500/20' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}
                         >
                             {item.icon} {item.label}
@@ -650,10 +666,41 @@ const DashboardNutricionista = ({ onLogout }) => {
                                     >
                                         <div className="space-y-4">
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Mi Cuenta</p>
-                                            <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'nutricionistas',
+                                                        title: 'Editar Mi Perfil',
+                                                        fields: [
+                                                            { name: 'nombre', label: 'Nombre Completo', type: 'text' },
+                                                            { name: 'email', label: 'Email Institucional', type: 'email' },
+                                                            { name: 'password', label: 'Nueva Contraseña', type: 'password' }
+                                                        ],
+                                                        data: profile
+                                                    });
+                                                    setIsProfileOpen(false);
+                                                }}
+                                                className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all text-left"
+                                            >
                                                 <User size={16} /> Editar Perfil
                                             </button>
-                                            <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'preferences',
+                                                        title: 'Preferencias del Sistema',
+                                                        fields: [
+                                                            { name: 'theme', label: 'Modo Visual', type: 'select', options: [{id:'dark', nombre:'Modo Oscuro'}, {id:'light', nombre:'Modo Claro'}] },
+                                                            { name: 'notifications', label: 'Notificaciones Push', type: 'select', options: [{id:'on', nombre:'Activadas'}, {id:'off', nombre:'Desactivadas'}] }
+                                                        ],
+                                                        data: { theme: localStorage.getItem('theme'), notifications: 'on' }
+                                                    });
+                                                    setIsProfileOpen(false);
+                                                }}
+                                                className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all text-left"
+                                            >
                                                 <Settings size={16} /> Preferencias
                                             </button>
                                             <div className="h-px bg-slate-50 dark:bg-slate-800 mx-2" />
@@ -724,13 +771,28 @@ const DashboardNutricionista = ({ onLogout }) => {
                                     <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Administración de Cuentas</h3>
                                     <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest">Control de acceso y perfiles de sistema</p>
                                 </div>
-                                <button className="px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center gap-3">
+                                <button 
+                                    onClick={() => {
+                                        setModalConfig({
+                                            isOpen: true,
+                                            type: 'nutricionistas',
+                                            title: 'Nueva Cuenta Staff',
+                                            fields: [
+                                                { name: 'nombre', label: 'Nombre Completo', type: 'text' },
+                                                { name: 'email', label: 'Email', type: 'email' },
+                                                { name: 'password', label: 'Contraseña Provisional', type: 'password' }
+                                            ],
+                                            data: null
+                                        });
+                                    }}
+                                    className="px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center gap-3"
+                                >
                                     <Plus size={18} /> Nueva Cuenta Staff
                                 </button>
                             </div>
                             
                             <div className="space-y-6">
-                                {usuarios.slice(0, 5).map(u => (
+                                {usuarios.slice(0, 8).map(u => (
                                     <div key={u.id} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
                                         <div className="flex items-center gap-6">
                                             <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400"><User size={24} /></div>
@@ -740,8 +802,38 @@ const DashboardNutricionista = ({ onLogout }) => {
                                             </div>
                                         </div>
                                         <div className="flex gap-4">
-                                            <button className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all">Cambiar Pass</button>
-                                            <button className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all">Editar Permisos</button>
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'usuarios',
+                                                        title: `Cambiar Password: ${u.nombre}`,
+                                                        fields: [
+                                                            { name: 'password', label: 'Nueva Contraseña', type: 'password' }
+                                                        ],
+                                                        data: u
+                                                    });
+                                                }}
+                                                className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                            >
+                                                Cambiar Pass
+                                            </button>
+                                            <button 
+                                                onClick={() => {
+                                                    setModalConfig({
+                                                        isOpen: true,
+                                                        type: 'usuarios',
+                                                        title: `Editar Rol: ${u.nombre}`,
+                                                        fields: [
+                                                            { name: 'tarifa', label: 'Plan / Rol', type: 'select', options: [{id:'Basic', nombre:'Basic'}, {id:'Plus', nombre:'Plus'}, {id:'Premium', nombre:'Premium'}] }
+                                                        ],
+                                                        data: u
+                                                    });
+                                                }}
+                                                className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                            >
+                                                Editar Permisos
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -930,7 +1022,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                 onClose={() => setModalConfig({ isOpen: false, type: null, data: null })} 
                 title={modalConfig.title} 
                 fields={modalConfig.fields || []} 
-                initialData={null} 
+                initialData={modalConfig.data} 
                 onSave={handleGenericSave} 
             />
 
