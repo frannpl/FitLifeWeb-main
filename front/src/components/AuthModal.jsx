@@ -148,7 +148,7 @@ const AuthModal = ({ isOpen, onClose, onLogin }) => {
                             required
                             type="email"
                             name="email"
-                            placeholder="fran@fitlife.pro"
+                            placeholder="fran@fitlife.web"
                             onChange={handleChange}
                             className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/5 focus:border-health-500/30 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-700"
                         />

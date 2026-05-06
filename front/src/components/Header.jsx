@@ -41,7 +41,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                         <div className="w-9 h-9 bg-health-500 rounded-xl flex items-center justify-center transform group-hover:rotate-6 transition-transform shadow-lg shadow-health-500/20">
                             <Activity size={20} className="text-white" />
                         </div>
-                        <span className={headerTextColor}>FitLife<span className="text-health-500">Pro</span></span>
+                        <span className={headerTextColor}>FitLife<span className="text-health-500">Web</span></span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-10 text-sm font-bold">

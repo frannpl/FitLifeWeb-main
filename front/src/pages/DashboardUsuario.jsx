@@ -240,7 +240,7 @@ const DashboardUsuario = () => {
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-12 p-8 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 rounded-4xl flex items-center gap-8">
                                     <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm"><Info size={32} /></div>
                                     <div>
-                                        <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">¡Bienvenido a FitLife Pro!</h3>
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">¡Bienvenido a FitLife Web!</h3>
                                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Tu nutricionista está preparando tu primer plan personalizado. En cuanto esté listo, aparecerá aquí automáticamente.</p>
                                     </div>
                                 </motion.div>
