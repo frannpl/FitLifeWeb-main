@@ -39,7 +39,9 @@ const AppContent = ({ user, role, onLogout, theme, toggleTheme }) => {
 
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={
+            user ? <Navigate to={role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'} replace /> : <LandingPage />
+          } />
 
           <Route path="/dashboard" element={
             <ProtectedRoute user={user}>
