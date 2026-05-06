@@ -175,7 +175,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
     };
 
     const togglePro = () => {
-        setEditedClient({ ...editedClient, isPro: !editedClient.isPro });
+        setEditedClient({ ...editedClient, pro: !editedClient.pro });
     };
 
     const handleSaveAll = () => {
@@ -266,7 +266,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                             {[
                                 { id: 'perfil', label: 'Biometría', icon: <Activity size={16} /> },
                                 { id: 'dieta', label: 'Nutrición', icon: <Utensils size={16} /> },
-                                { id: 'entreno', label: 'Entrenamiento', icon: <Dumbbell size={16} />, disabled: editedClient.tarifa === 'Basic' }
+                                { id: 'entreno', label: 'Entrenamiento', icon: <Dumbbell size={16} /> }
                             ].map(tab => (
                                 <button 
                                     key={tab.id}
@@ -534,8 +534,8 @@ const DashboardNutricionista = ({ onLogout }) => {
             const planMethod = assignedPlan.id ? 'PUT' : 'POST';
             await fetchAPI(planEndpoint, { method: planMethod, headers, body: JSON.stringify(assignedPlan) });
 
-            // 3. Save/Update Training Routine (if pro)
-            if (editedClient.isPro) {
+            // 3. Save/Update Training Routine (if pro or present)
+            if (editedClient.pro || assignedRoutine.nombreRutina) {
                 const rutEndpoint = assignedRoutine.id ? `/rutinas/${assignedRoutine.id}` : '/rutinas';
                 const rutMethod = assignedRoutine.id ? 'PUT' : 'POST';
                 await fetchAPI(rutEndpoint, { method: rutMethod, headers, body: JSON.stringify(assignedRoutine) });
