@@ -64,7 +64,15 @@ public class SecurityConfig {
             }
         }
 
-        configuration.setAllowedOrigins(origins);
+        configuration.setAllowedOriginPatterns(java.util.List.of(
+            "http://localhost:[*]",
+            "http://127.0.0.1:[*]",
+            "https://*.vercel.app"
+        ));
+        
+        // Mantener también los orígenes específicos por si acaso
+        // configuration.setAllowedOrigins(origins); 
+
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "Accept", "X-Requested-With", "Cache-Control"));
         configuration.setAllowCredentials(true);
