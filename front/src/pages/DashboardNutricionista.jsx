@@ -1072,7 +1072,6 @@ const DashboardNutricionista = ({ onLogout }) => {
                     </motion.div>
                 </motion.div>
             )}
-            </AnimatePresence>
         </div>
     );
 };
