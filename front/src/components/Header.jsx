@@ -134,35 +134,44 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-4 shadow-2xl"
+                            className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-4 shadow-2xl overflow-y-auto max-h-[calc(100vh-100%)]"
                         >
                             {user ? (
-                                <>
-                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'); setMobileMenuOpen(false); }} className="text-slate-600 dark:text-slate-400 font-bold py-2 text-left">Panel Control</button>
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-50 dark:border-slate-800">
+                                        <div className="w-10 h-10 rounded-full bg-health-50 dark:bg-health-900/20 flex items-center justify-center text-health-500"><User size={20} /></div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Bienvenido</p>
+                                            <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{user}</p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><Layout size={18} /> Panel Control</button>
                                     {role === 'nutricionista' && (
                                         <>
-                                            <button onClick={() => { navigate('/planes'); setMobileMenuOpen(false); }} className="text-slate-600 dark:text-slate-400 font-bold py-2 text-left">Planes</button>
-                                            <button onClick={() => { navigate('/rutinas'); setMobileMenuOpen(false); }} className="text-slate-600 dark:text-slate-400 font-bold py-2 text-left">Rutinas</button>
+                                            <button onClick={() => { navigate('/planes'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><Utensils size={18} /> Planes</button>
+                                            <button onClick={() => { navigate('/rutinas'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><Dumbbell size={18} /> Rutinas</button>
                                         </>
                                     )}
+                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista?tab=cuentas' : '/dashboard?tab=settings'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><Settings size={18} /> Ajustes</button>
                                     <hr className="border-slate-50 dark:border-slate-800" />
-                                    <button onClick={() => { onLogout(); setMobileMenuOpen(false); }} className="w-full py-4 bg-red-50 dark:bg-red-900/10 text-red-500 dark:text-red-400 font-black rounded-2xl">
-                                        Cerrar Sesión
+                                    <button onClick={() => { onLogout(); setMobileMenuOpen(false); }} className="w-full py-4 bg-red-50 dark:bg-red-900/10 text-red-500 dark:text-red-400 font-black rounded-2xl flex items-center justify-center gap-3">
+                                        <LogOut size={18} /> Cerrar Sesión
                                     </button>
-                                </>
+                                </div>
                             ) : (
-                                <>
-                                    <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="text-slate-600 dark:text-slate-400 font-bold py-2 text-left">Inicio</button>
+                                <div className="space-y-4">
+                                    <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left">Inicio</button>
+                                    <button onClick={() => { setAuthModalOpen(true); setMobileMenuOpen(false); }} className="w-full text-slate-900 dark:text-white font-black py-3 text-left">Iniciar Sesión</button>
                                     <hr className="border-slate-50 dark:border-slate-800" />
                                     <a 
                                         href="https://wa.me/34618555371?text=Hola,%20me%20gustaría%20unirme%20como%20cliente." 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="w-full py-4 bg-health-500 text-white font-black rounded-2xl flex items-center justify-center"
+                                        className="w-full py-4 bg-health-500 text-white font-black rounded-2xl flex items-center justify-center shadow-xl shadow-health-500/20"
                                     >
                                         ÚNETE COMO CLIENTE
                                     </a>
-                                </>
+                                </div>
                             )}
                         </motion.div>
                     )}

@@ -80,7 +80,7 @@ const AuthModal = ({ isOpen, onClose, onLogin }) => {
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-white dark:bg-slate-900 rounded-4xl w-full max-w-md p-10 relative shadow-2xl border border-slate-100 dark:border-slate-800 transition-colors duration-500"
+                className="bg-white dark:bg-slate-900 rounded-4xl w-full max-w-md p-6 md:p-10 relative shadow-2xl border border-slate-100 dark:border-slate-800 transition-colors duration-500 max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
                 <button onClick={onClose} className="absolute top-8 right-8 text-slate-300 dark:text-slate-600 hover:text-slate-900 dark:hover:text-white transition-colors p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl">
                     <X size={20} />

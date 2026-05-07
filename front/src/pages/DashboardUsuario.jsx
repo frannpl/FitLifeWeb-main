@@ -99,9 +99,9 @@ const DashboardUsuario = () => {
     }
 
     const renderOverview = () => (
-        <div className="grid lg:grid-cols-12 gap-8 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
             {/* Sidebar Stats */}
-            <div className="lg:col-span-4 space-y-8 h-full overflow-y-auto custom-scrollbar pr-2">
+            <div className="lg:col-span-4 space-y-8 h-full">
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="card-premium p-8 relative overflow-hidden bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-6 mb-8">
                         <div className="w-16 h-16 rounded-2xl bg-health-50 dark:bg-health-900/20 flex items-center justify-center text-health-500 dark:text-health-400">
@@ -249,7 +249,7 @@ const DashboardUsuario = () => {
     );
 
     const renderSettings = () => (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid lg:grid-cols-12 gap-8 h-full">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
             <div className="lg:col-span-4 space-y-6">
                 <div className="card-premium p-8 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
                     <div className="flex flex-col items-center text-center mb-8">
@@ -346,14 +346,14 @@ const DashboardUsuario = () => {
     );
 
     return (
-        <div className="min-h-screen bg-surface-base dark:bg-slate-950 pt-40 pb-20 px-8 flex flex-col transition-colors duration-500">
+        <div className="min-h-screen bg-surface-base dark:bg-slate-950 pt-24 md:pt-40 pb-20 px-4 md:px-8 flex flex-col transition-colors duration-500">
             <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col min-h-0">
                 <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 gap-8">
                     <div>
                         <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional</span>
-                        <h1 className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Mi Proceso.</h1>
+                        <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Mi Proceso.</h1>
                     </div>
-                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800">
+                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800 w-full md:w-auto overflow-x-auto custom-scrollbar">
                         {['overview', 'diet', 'training', 'settings'].map(tab => {
                             if (tab === 'training' && profile?.tarifa === 'Basic') return null;
                             return (
@@ -387,8 +387,8 @@ const DashboardUsuario = () => {
                         )}
                         {activeTab === 'settings' && <div key="settings">{renderSettings()}</div>}
                         {(activeTab === 'diet' || activeTab === 'training') && (
-                            <motion.div key="content" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="card-premium p-12 bg-white dark:bg-slate-900 h-full overflow-y-auto custom-scrollbar border-slate-100 dark:border-slate-800">
-                                <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-8">
+                            <motion.div key="content" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="card-premium p-8 md:p-12 bg-white dark:bg-slate-900 h-full overflow-y-auto custom-scrollbar border-slate-100 dark:border-slate-800">
+                                <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-8">
                                     {activeTab === 'diet' ? (assignedPlan?.nombrePlan || 'Plan Nutricional') : (assignedRoutine?.nombreRutina || 'Rutina de Entrenamiento')}
                                 </h2>
                                 <div className="prose dark:prose-invert prose-slate max-w-none text-lg leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-line">

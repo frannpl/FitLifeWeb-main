@@ -67,7 +67,7 @@ const AdminModal = ({ isOpen, onClose, title, fields, initialData, onSave }) => 
                     </button>
                     <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8 pr-12 tracking-tighter">{title}</h2>
 
-                    <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-x-6 gap-y-5">
+                    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                         {fields.map(field => (
                             <div key={field.name} className={`${field.type === 'textarea' || field.fullWidth ? 'col-span-2' : 'col-span-1'}`}>
                                 <label className="block text-slate-400 text-[10px] font-black mb-2 uppercase tracking-widest">
@@ -198,9 +198,9 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         className="fixed inset-0 z-[160] flex items-center justify-center p-4 sm:p-10 pointer-events-none"
                     >
-                        <div className="bg-white dark:bg-slate-900 w-full max-w-5xl max-h-[90vh] rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] flex flex-col border border-slate-100 dark:border-slate-800 overflow-hidden pointer-events-auto">
+                        <div className="bg-white dark:bg-slate-900 w-full max-w-5xl max-h-[90vh] rounded-[2rem] md:rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] flex flex-col border border-slate-100 dark:border-slate-800 overflow-hidden pointer-events-auto">
                         {/* Header */}
-                        <div className="p-8 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/30">
+                        <div className="p-6 md:p-8 border-b border-slate-50 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50/30 dark:bg-slate-800/30">
                             <div className="flex items-center gap-6">
                                 <button onClick={onClose} className="p-4 bg-white dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-red-500 transition-all shadow-sm group">
                                     <X size={24} className="group-hover:rotate-90 transition-transform" />
@@ -214,27 +214,26 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                                 <Save size={16} /> Guardar Cambios
                             </button>
                         </div>
-
-                        {/* Profile Summary */}
-                        <div className="p-8 flex items-center gap-8 bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800">
-                            <div className="w-24 h-24 rounded-3xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center text-3xl font-black shadow-xl">
+                        {/* Profile Summary */}
+                        <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8 bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800">
+                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center text-3xl font-black shadow-xl shrink-0">
                                 {editedClient.nombre?.charAt(0)}
                             </div>
-                            <div className="flex-1">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{editedClient.nombre}</h3>
+                            <div className="flex-1 w-full">
+                                <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter text-center md:text-left">{editedClient.nombre}</h3>
                                         <select 
                                             name="tarifa"
                                             value={editedClient.tarifa || 'Basic'}
                                             onChange={handleClientChange}
-                                            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all focus:outline-none appearance-none cursor-pointer ${editedClient.tarifa === 'Premium' ? 'bg-amber-500 text-white' : editedClient.tarifa === 'Plus' ? 'bg-indigo-500 text-white' : 'bg-health-500 text-white'}`}
+                                            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all focus:outline-none appearance-none cursor-pointer ${editedClient.tarifa === 'Premium' ? 'bg-amber-50 text-white' : editedClient.tarifa === 'Plus' ? 'bg-indigo-50 text-white' : 'bg-health-50 text-white'}`}
                                         >
                                             <option value="Basic" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">🌱 Basic</option>
                                             <option value="Plus" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">🚀 Plus</option>
                                             <option value="Premium" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">💎 Premium</option>
                                         </select>
                                     </div>
-                                    <div className="flex gap-6 items-center mt-4">
+                                    <div className="flex flex-wrap gap-4 md:gap-6 items-center justify-center md:justify-start mt-4">
                                         <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-xs font-bold"><Mail size={14} /> {editedClient.email}</div>
                                         <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-xs font-bold">
                                             <Calendar size={14} className="text-health-500" /> 
@@ -258,12 +257,12 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                                                 className="bg-transparent border-none p-0 text-slate-900 dark:text-white font-black text-xs focus:ring-0 cursor-pointer"
                                             />
                                         </div>
-                                    </div>
                                 </div>
                             </div>
+                        </div>
 
                         {/* Tabs */}
-                        <div className="flex px-8 border-b border-slate-50 dark:border-slate-800 gap-8">
+                        <div className="flex px-6 md:px-8 border-b border-slate-50 dark:border-slate-800 gap-6 md:gap-8 overflow-x-auto custom-scrollbar">
                             {[
                                 { id: 'perfil', label: 'Biometría', icon: <Activity size={16} /> },
                                 { id: 'dieta', label: 'Nutrición', icon: <Utensils size={16} /> },
@@ -272,7 +271,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                                 <button 
                                     key={tab.id}
                                     onClick={() => !tab.disabled && setActiveTab(tab.id)}
-                                    className={`py-6 flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 ${tab.disabled ? 'opacity-30 cursor-not-allowed' : activeTab === tab.id ? 'border-health-500 text-slate-900 dark:text-white' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+                                    className={`py-4 md:py-6 flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 shrink-0 ${tab.disabled ? 'opacity-30 cursor-not-allowed' : activeTab === tab.id ? 'border-health-500 text-slate-900 dark:text-white' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
                                 >
                                     {tab.icon} {tab.label}
                                 </button>
@@ -287,7 +286,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                                         <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-3">
                                             <Scale size={16} className="text-health-500" /> Composición Corporal
                                         </h4>
-                                        <div className="grid grid-cols-2 gap-6">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                                             <MetricInput label="Peso Actual (kg)" name="pesoActual" value={editedClient.pesoActual} onChange={handleClientChange} />
                                             <MetricInput label="Grasa (%)" name="porcentajeGrasa" value={editedClient.porcentajeGrasa} onChange={handleClientChange} />
                                             <MetricInput label="Altura (m)" name="altura" value={editedClient.altura} onChange={handleClientChange} step="0.01" />
@@ -299,7 +298,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                                         <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-3">
                                             <TrendingUp size={16} className="text-indigo-500" /> Perímetro Antropométrico
                                         </h4>
-                                        <div className="grid grid-cols-2 gap-6">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                                             <MetricInput label="Pecho (cm)" name="medidaPecho" value={editedClient.medidaPecho} onChange={handleClientChange} />
                                             <MetricInput label="Cintura (cm)" name="medidaCintura" value={editedClient.medidaCintura} onChange={handleClientChange} />
                                             <MetricInput label="Brazos (cm)" name="medidaBrazos" value={editedClient.medidaBrazos} onChange={handleClientChange} />
@@ -681,7 +680,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                         </button>
                         <div>
                             <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-3 block">Gabinete de Nutrición Deportiva</span>
-                            <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
+                            <h2 className="text-2xl md:text-4xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
                         </div>
                     </div>
                     <div className="flex items-center gap-6">
@@ -896,7 +895,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                 ) : (
                     <div className="card-premium bg-white dark:bg-slate-900 overflow-hidden border-none shadow-[0_40px_80px_-20px_rgba(0,0,0,0.02)] dark:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.3)] border-slate-100 dark:border-slate-800">
                         <div className="p-10 border-b border-slate-50 dark:border-slate-800 bg-slate-50/20 dark:bg-slate-800/20 flex flex-col md:flex-row justify-between items-center gap-6">
-                            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+                            <h2 className="text-xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
                                 {activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab === 'planes' ? 'Biblioteca de Dietas' : 'Sistemas de Entrenamiento'}
                             </h2>
                             <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">

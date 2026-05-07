@@ -25,7 +25,7 @@ const LandingPage = () => {
     return (
         <div className="bg-surface-base min-h-screen">
             {/* Hero Section - Dynamic Aesthetic */}
-            <section className="relative pt-64 pb-48 overflow-hidden min-h-screen flex items-center bg-white dark:bg-slate-950 transition-colors duration-700">
+            <section className="relative pt-40 md:pt-64 pb-24 md:pb-48 overflow-hidden min-h-screen flex items-center bg-white dark:bg-slate-950 transition-colors duration-700">
                 <div className="absolute inset-0 z-0">
                     <img 
                         src="/assets/fitness_bg.png" 
@@ -55,9 +55,9 @@ const LandingPage = () => {
                         <motion.h1 
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-5xl md:text-[9.5rem] font-black text-slate-900 dark:text-white tracking-tighter mb-12 leading-[0.85] transition-colors duration-700 font-['Montserrat']"
+                            className="text-4xl sm:text-6xl md:text-[9.5rem] font-black text-slate-900 dark:text-white tracking-tighter mb-8 md:mb-12 leading-[1] md:leading-[0.85] transition-colors duration-700 font-['Montserrat']"
                         >
-                            Esculpe tu Cuerpo <br/>
+                            Esculpe tu Cuerpo <br className="hidden md:block"/>
                             <span className="text-gradient-health italic font-['Playfair_Display']">con Precisión.</span>
                         </motion.h1>
                         
@@ -101,12 +101,12 @@ const LandingPage = () => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-8 relative z-10">
-                    <div className="mb-32 flex flex-col md:flex-row justify-between items-end gap-12">
+                    <div className="mb-20 md:mb-32 flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-12">
                         <div className="max-w-2xl">
-                            <span className="text-wellness-500 dark:text-wellness-400 font-black text-xs uppercase tracking-[0.5em] mb-6 block">EL MÉTODO DE ÉLITE</span>
-                            <h2 className="text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]">Los 3 Pilares de <br/> tu Transformación</h2>
+                            <span className="text-wellness-500 dark:text-wellness-400 font-black text-xs uppercase tracking-[0.5em] mb-4 md:mb-6 block">EL MÉTODO DE ÉLITE</span>
+                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-[1] md:leading-[0.9]">Los 3 Pilares de <br className="hidden md:block"/> tu Transformación</h2>
                         </div>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-2 text-xl leading-relaxed">Fusionamos análisis de datos avanzados con nutrición de alto rendimiento para garantizar una composición corporal óptima y salud duradera.</p>
+                        <p className="text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-2 text-lg md:text-xl leading-relaxed">Fusionamos análisis de datos avanzados con nutrición de alto rendimiento para garantizar una composición corporal óptima y salud duradera.</p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-12">
@@ -137,7 +137,7 @@ const LandingPage = () => {
                 <div className="absolute inset-0 opacity-5 dark:opacity-20">
                     <img src="/assets/metrics_bg.png" alt="Metrics" className="w-full h-full object-cover" />
                 </div>
-                <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-4 gap-20 relative z-10">
+                <div className="max-w-7xl mx-auto px-8 grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-20 relative z-10">
                     {[
                         { val: '15K+', label: 'PLANES DE NUTRICIÓN ACTIVOS' },
                         { val: '99%', label: 'PRECISIÓN METABÓLICA CERTIFICADA' },
@@ -145,16 +145,16 @@ const LandingPage = () => {
                         { val: 'PRO', label: 'NUTRICIONISTAS EN LA PLATAFORMA' }
                     ].map((s, i) => (
                         <div key={i} className="text-center group cursor-default">
-                            <p className="text-7xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-health-500 transition-all duration-700 group-hover:scale-110">{s.val}</p>
-                            <p className="text-slate-500 dark:text-slate-400 font-black text-[11px] uppercase tracking-[0.5em] mt-6">{s.label}</p>
+                            <p className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-health-500 transition-all duration-700 group-hover:scale-110">{s.val}</p>
+                            <p className="text-slate-500 dark:text-slate-400 font-black text-[9px] md:text-[11px] uppercase tracking-[0.5em] mt-4 md:mt-6">{s.label}</p>
                         </div>
                     ))}
                 </div>
             </section>
 
             {/* Final CTA Section */}
-            <section className="py-40 px-8 bg-surface-base dark:bg-slate-950 transition-colors duration-500">
-                <div className="max-w-7xl mx-auto card-premium bg-white dark:bg-slate-900 p-24 text-center overflow-hidden relative border-none shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] dark:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)]">
+            <section className="py-20 md:py-40 px-4 md:px-8 bg-surface-base dark:bg-slate-950 transition-colors duration-500">
+                <div className="max-w-7xl mx-auto card-premium bg-white dark:bg-slate-900 p-10 md:p-24 text-center overflow-hidden relative border-none shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] dark:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)]">
                     <div className="absolute inset-0 bg-gradient-to-br from-health-500/5 to-wellness-500/5 dark:from-health-500/10 dark:to-wellness-500/10"></div>
                     <img 
                         src="/assets/fitness_bg.png" 
@@ -162,8 +162,8 @@ const LandingPage = () => {
                         className="absolute inset-0 w-full h-full object-cover opacity-5 dark:opacity-20 mix-blend-overlay"
                     />
                     <div className="relative z-10 max-w-3xl mx-auto">
-                        <h2 className="text-7xl font-black text-slate-900 dark:text-white tracking-tighter mb-12 leading-[0.9] font-['Montserrat']">¿Listo para transformar <br/> tu físico?</h2>
-                        <p className="text-slate-600 dark:text-slate-400 text-xl font-medium mb-16 leading-relaxed">Únete a la plataforma de nutrición más avanzada del sector, la herramienta elegida por nutricionistas de élite para optimizar los resultados de sus clientes. Tu transformación comienza hoy, garantizada por la ciencia y guiada por profesionales.</p>
+                        <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter mb-8 md:mb-12 leading-[1] md:leading-[0.9] font-['Montserrat']">¿Listo para transformar <br className="hidden md:block"/> tu físico?</h2>
+                        <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-medium mb-10 md:mb-16 leading-relaxed">Únete a la plataforma de nutrición más avanzada del sector, la herramienta elegida por nutricionistas de élite para optimizar los resultados de sus clientes. Tu transformación comienza hoy, garantizada por la ciencia y guiada por profesionales.</p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <button 
                                 onClick={() => {
