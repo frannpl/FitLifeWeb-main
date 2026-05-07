@@ -27,6 +27,11 @@ const DashboardUsuario = () => {
         }
     }, [location.search]);
 
+    // Ensure we scroll to top when changing tabs
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [activeTab]);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (userStr && token) {
