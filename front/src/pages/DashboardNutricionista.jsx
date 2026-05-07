@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
     Users, FileText, Dumbbell, Utensils, Activity, Edit2, Trash2, 
@@ -128,6 +128,26 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
     const [editedClient, setEditedClient] = useState({});
     const [assignedPlan, setAssignedPlan] = useState(null);
     const [assignedRoutine, setAssignedRoutine] = useState(null);
+    const contentRef = useRef(null);
+
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
+    // Reset scroll when tab changes
+    useEffect(() => {
+        if (contentRef.current) {
+            contentRef.current.scrollTop = 0;
+        }
+    }, [activeTab]);
 
     useEffect(() => {
         if (client) {
@@ -279,7 +299,7 @@ const ClientDetailFlyout = ({ isOpen, onClose, client, onSave, planes, rutinas }
                         </div>
 
                         {/* Tab Content */}
-                        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                        <div ref={contentRef} className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar scroll-smooth">
                             {activeTab === 'perfil' && (
                                 <div className="space-y-10">
                                     <section>
