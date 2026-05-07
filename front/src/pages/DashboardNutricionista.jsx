@@ -480,6 +480,7 @@ const DashboardNutricionista = ({ onLogout }) => {
     const [searchUsuarios, setSearchUsuarios] = useState('');
     const [searchPlanes, setSearchPlanes] = useState('');
     const [searchRutinas, setSearchRutinas] = useState('');
+    const [searchCuentas, setSearchCuentas] = useState('');
     const [modalConfig, setModalConfig] = useState({ isOpen: false, type: null, data: null });
     const [deleteConfirm, setDeleteConfirm] = useState(null); 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -503,6 +504,13 @@ const DashboardNutricionista = ({ onLogout }) => {
             r.nivel?.toLowerCase().includes(searchRutinas.toLowerCase())
         ));
     }, [rutinas, searchRutinas]);
+
+    const filteredCuentas = useMemo(() => {
+        return usuarios.filter(u => 
+            u.nombre?.toLowerCase().includes(searchCuentas.toLowerCase()) || 
+            u.email?.toLowerCase().includes(searchCuentas.toLowerCase())
+        );
+    }, [usuarios, searchCuentas]);
 
     const fetchData = async () => {
         setLoading(true);
@@ -825,9 +833,19 @@ const DashboardNutricionista = ({ onLogout }) => {
                                     <Plus size={18} /> Nueva Cuenta
                                 </button>
                             </div>
+
+                            <div className="relative mb-10">
+                                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" size={18} />
+                                <input 
+                                    placeholder="Buscar por nombre o email..." 
+                                    value={searchCuentas}
+                                    onChange={(e) => setSearchCuentas(e.target.value)}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl pl-12 pr-6 py-4 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-health-500/5 transition-all text-slate-900 dark:text-white" 
+                                />
+                            </div>
                             
-                            <div className="space-y-6">
-                                {usuarios.slice(0, 8).map(u => (
+                            <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                                {filteredCuentas.map(u => (
                                     <div key={u.id} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
                                         <div className="flex items-center gap-6">
                                             <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400"><User size={24} /></div>
@@ -936,6 +954,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                                                 <th className="p-8">Estado Vital</th>
                                                 <th className="p-8">Tarifa Actual</th>
                                                 <th className="p-8">Próxima Cita</th>
+                                                <th className="p-8 text-right">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -982,6 +1001,40 @@ const DashboardNutricionista = ({ onLogout }) => {
                                                             );
                                                         })() : <span className="text-slate-300 text-[10px] font-black uppercase tracking-widest">Sin Cita</span>}
                                                     </td>
+                                                    <td className="p-8 text-right">
+                                                        <div className="flex justify-end gap-2">
+                                                            <button 
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setModalConfig({
+                                                                        isOpen: true,
+                                                                        type: 'usuarios',
+                                                                        title: 'Modificar Datos de Cliente',
+                                                                        fields: [
+                                                                            { name: 'nombre', label: 'Nombre Completo', type: 'text' },
+                                                                            { name: 'email', label: 'Email', type: 'email' },
+                                                                            { name: 'edad', label: 'Edad', type: 'number' },
+                                                                            { name: 'pesoActual', label: 'Peso (kg)', type: 'number' },
+                                                                            { name: 'altura', label: 'Altura (m)', type: 'number', step: '0.01' }
+                                                                        ],
+                                                                        data: u
+                                                                    });
+                                                                }}
+                                                                className="p-2 text-slate-300 hover:text-health-500 transition-colors"
+                                                            >
+                                                                <Edit2 size={18} />
+                                                            </button>
+                                                            <button 
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setDeleteConfirm({ type: 'usuarios', id: u.id });
+                                                                }}
+                                                                className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                                                            >
+                                                                <Trash2 size={18} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -1005,7 +1058,25 @@ const DashboardNutricionista = ({ onLogout }) => {
                                                     </td>
                                                     <td className="p-8 text-slate-400 dark:text-slate-500 text-xs font-medium max-w-xs truncate">{p.descripcion}</td>
                                                     <td className="p-8 text-right">
-                                                        <button onClick={() => setDeleteConfirm({ type: 'planes', id: p.id })} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>
+                                                        <div className="flex justify-end gap-2">
+                                                            <button 
+                                                                onClick={() => setModalConfig({
+                                                                    isOpen: true,
+                                                                    type: 'planes',
+                                                                    title: 'Editar Plantilla Nutricional',
+                                                                    fields: [
+                                                                        { name: 'nombrePlan', label: 'Nombre del Plan', type: 'text' },
+                                                                        { name: 'tipoDieta', label: 'Tipo de Dieta', type: 'text' },
+                                                                        { name: 'descripcion', label: 'Descripción del Plan', type: 'textarea' }
+                                                                    ],
+                                                                    data: p
+                                                                })}
+                                                                className="p-2 text-slate-300 hover:text-health-500 transition-colors"
+                                                            >
+                                                                <Edit2 size={18} />
+                                                            </button>
+                                                            <button onClick={() => setDeleteConfirm({ type: 'planes', id: p.id })} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -1085,7 +1156,26 @@ const DashboardNutricionista = ({ onLogout }) => {
                                                     </td>
                                                     <td className="p-8 font-black text-slate-400 dark:text-slate-500 text-xs">{r.duracion} sem</td>
                                                     <td className="p-8 text-right">
-                                                        <button onClick={() => setDeleteConfirm({ type: 'rutinas', id: r.id })} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>
+                                                        <div className="flex justify-end gap-2">
+                                                            <button 
+                                                                onClick={() => setModalConfig({
+                                                                    isOpen: true,
+                                                                    type: 'rutinas',
+                                                                    title: 'Editar Plantilla de Entrenamiento',
+                                                                    fields: [
+                                                                        { name: 'nombreRutina', label: 'Nombre de la Rutina', type: 'text' },
+                                                                        { name: 'nivel', label: 'Nivel', type: 'select', options: [{id:'Principiante', nombre:'Principiante'}, {id:'Intermedio', nombre:'Intermedio'}, {id:'Avanzado', nombre:'Avanzado'}] },
+                                                                        { name: 'duracion', label: 'Duración (semanas)', type: 'number' },
+                                                                        { name: 'descripcion', label: 'Descripción de la Rutina', type: 'textarea' }
+                                                                    ],
+                                                                    data: r
+                                                                })}
+                                                                className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
+                                                            >
+                                                                <Edit2 size={18} />
+                                                            </button>
+                                                            <button onClick={() => setDeleteConfirm({ type: 'rutinas', id: r.id })} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
