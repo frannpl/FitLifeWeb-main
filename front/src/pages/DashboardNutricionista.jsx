@@ -671,22 +671,22 @@ const DashboardNutricionista = ({ onLogout }) => {
             {/* Main Area */}
             <main className="flex-1 lg:ml-80 p-6 md:p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
                 <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-6 -m-6 mb-10 rounded-3xl border border-transparent dark:border-slate-800/50">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 md:gap-6">
                         <button 
-                            onClick={() => setIsSidebarOpen(true)}
-                            className="lg:hidden p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm text-slate-400"
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            className="lg:hidden p-3 bg-white dark:bg-slate-900 rounded-2xl text-slate-400 shadow-sm border border-slate-100 dark:border-slate-800"
                         >
-                            <Menu size={24} />
+                            <Menu size={20} />
                         </button>
                         <div>
-                            <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-3 block">Gabinete de Nutrición Deportiva</span>
-                            <h2 className="text-2xl md:text-4xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
+                            <span className="text-health-500 dark:text-health-400 font-black text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.5em] mb-2 md:mb-3 block">Gabinete de Nutrición Deportiva</span>
+                            <h2 className="text-xl md:text-4xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tighter capitalize">{activeTab === 'dashboard' ? 'Métricas Globales' : activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab}</h2>
                         </div>
                     </div>
-                    <div className="flex items-center gap-6">
-                        <div className="text-right">
-                            <p className="text-xs font-black text-slate-900 dark:text-white">{(profile?.nombre || 'Nutr. FitLife').replace(/supabase/gi, '').trim() || 'Nutricionista Principal'}</p>
-                            <p className="text-[9px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest mt-1">Nutricionista Principal</p>
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <div className="hidden sm:flex flex-col items-end">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest font-black">Nutricionista</span>
+                            <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tighter">{(profile?.nombre || 'Nutr. FitLife').replace(/supabase/gi, '').trim() || 'Nutricionista Principal'}</span>
                         </div>
                         <div className="relative">
                             <button 
@@ -772,10 +772,10 @@ const DashboardNutricionista = ({ onLogout }) => {
                             ))}
                         </div>
 
-                        <div className="grid lg:grid-cols-12 gap-10">
-                            <div className="lg:col-span-8 card-premium p-12 bg-white dark:bg-slate-900 h-[500px] border-slate-100 dark:border-slate-800">
-                                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-12 tracking-tighter">Actividad de Clientes</h3>
-                                <div className="h-[300px]">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                            <div className="lg:col-span-8 card-premium p-6 md:p-12 bg-white dark:bg-slate-900 h-[350px] md:h-[500px] border-slate-100 dark:border-slate-800">
+                                <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white mb-8 md:mb-12 tracking-tighter">Actividad de Clientes</h3>
+                                <div className="h-[200px] md:h-[300px]">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <AreaChart data={[
                                             { n: 'Lun', v: 40 }, { n: 'Mar', v: 65 }, { n: 'Mie', v: 55 }, { n: 'Jue', v: 85 }, { n: 'Vie', v: 75 }, { n: 'Sab', v: 95 }, { n: 'Dom', v: 110 }
@@ -789,8 +789,8 @@ const DashboardNutricionista = ({ onLogout }) => {
                                     </ResponsiveContainer>
                                 </div>
                             </div>
-                            <div className="lg:col-span-4 card-premium p-10 bg-white dark:bg-slate-900 flex flex-col h-[500px] border-slate-100 dark:border-slate-800">
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-10 tracking-tighter">Últimas Acciones</h3>
+                            <div className="lg:col-span-4 card-premium p-8 md:p-10 bg-white dark:bg-slate-900 flex flex-col h-[400px] md:h-[500px] border-slate-100 dark:border-slate-800">
+                                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-8 md:p-10 tracking-tighter">Últimas Acciones</h3>
                                 <div className="space-y-8 flex-1 overflow-y-auto custom-scrollbar pr-4">
                                     {activities.map(a => (
                                         <div key={a.id} className="flex gap-5 group">
@@ -806,12 +806,12 @@ const DashboardNutricionista = ({ onLogout }) => {
                         </div>
                     </div>
                 ) : activeTab === 'cuentas' ? (
-                    <div className="space-y-12">
-                        <div className="card-premium p-12 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
-                            <div className="flex justify-between items-center mb-12">
+                    <div className="space-y-8 md:space-y-12">
+                        <div className="card-premium p-6 md:p-12 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 md:mb-12">
                                 <div>
-                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Administración de Cuentas</h3>
-                                    <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest">Control de acceso y perfiles de sistema</p>
+                                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Administración de Cuentas</h3>
+                                    <p className="text-[10px] md:text-xs text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest">Control de acceso y perfiles de sistema</p>
                                 </div>
                                 <button 
                                     onClick={() => {
@@ -827,7 +827,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                                             data: null
                                         });
                                     }}
-                                    className="px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center gap-3"
+                                    className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-health-600 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-health-500 transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-900/10"
                                 >
                                     <Plus size={18} /> Nueva Cuenta
                                 </button>
@@ -843,17 +843,17 @@ const DashboardNutricionista = ({ onLogout }) => {
                                 />
                             </div>
                             
-                            <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                            <div className="space-y-4 md:space-y-6 max-h-[600px] overflow-y-auto pr-2 md:pr-4 custom-scrollbar">
                                 {filteredCuentas.map(u => (
-                                    <div key={u.id} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
-                                        <div className="flex items-center gap-6">
-                                            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400"><User size={24} /></div>
-                                            <div>
-                                                <p className="font-black text-slate-900 dark:text-white">{u.nombre}</p>
-                                                <p className="text-[10px] text-slate-400 font-bold">{u.email}</p>
+                                    <div key={u.id} className="flex flex-col sm:flex-row items-center justify-between p-5 md:p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800 gap-6">
+                                        <div className="flex items-center gap-4 md:gap-6 w-full sm:w-auto">
+                                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-slate-400 shrink-0"><User size={20} className="md:w-6 md:h-6" /></div>
+                                            <div className="min-w-0">
+                                                <p className="font-black text-slate-900 dark:text-white truncate text-sm md:text-base">{u.nombre}</p>
+                                                <p className="text-[10px] text-slate-400 font-bold truncate">{u.email}</p>
                                             </div>
                                         </div>
-                                        <div className="flex gap-4">
+                                        <div className="flex gap-2 md:gap-4 w-full sm:w-auto">
                                             <button 
                                                 onClick={() => {
                                                     setModalConfig({
@@ -866,9 +866,9 @@ const DashboardNutricionista = ({ onLogout }) => {
                                                         data: u
                                                     });
                                                 }}
-                                                className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                                className="flex-1 sm:flex-none px-4 py-3 md:py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all shadow-sm"
                                             >
-                                                Cambiar Pass
+                                                Pass
                                             </button>
                                             <button 
                                                 onClick={() => {
@@ -882,9 +882,9 @@ const DashboardNutricionista = ({ onLogout }) => {
                                                         data: u
                                                     });
                                                 }}
-                                                className="px-4 py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all"
+                                                className="flex-1 sm:flex-none px-4 py-3 md:py-2 bg-white dark:bg-slate-900 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-health-500 border border-slate-100 dark:border-slate-800 rounded-xl transition-all shadow-sm"
                                             >
-                                                Editar Permisos
+                                                Rol
                                             </button>
                                         </div>
                                     </div>
@@ -899,7 +899,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                                 {activeTab === 'usuarios' ? 'Gestión de Clientes' : activeTab === 'planes' ? 'Biblioteca de Dietas' : 'Sistemas de Entrenamiento'}
                             </h2>
                             <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                                <div className="relative flex-1">
+                                <div className="relative w-full md:w-auto">
                                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" size={18} />
                                     <input 
                                         placeholder={`Buscar ${activeTab === 'usuarios' ? 'clientes...' : activeTab === 'planes' ? 'dietas...' : 'entrenamientos...'}`} 
@@ -909,7 +909,7 @@ const DashboardNutricionista = ({ onLogout }) => {
                                             else if (activeTab === 'planes') setSearchPlanes(e.target.value);
                                             else setSearchRutinas(e.target.value);
                                         }}
-                                        className="w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl pl-12 pr-6 py-4 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-health-500/5 dark:focus:ring-health-500/10 min-w-[300px] transition-all text-slate-900 dark:text-white" 
+                                        className="w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl pl-12 pr-6 py-4 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-health-500/5 dark:focus:ring-health-500/10 md:min-w-[300px] transition-all text-slate-900 dark:text-white" 
                                     />
                                 </div>
                                 <button 
