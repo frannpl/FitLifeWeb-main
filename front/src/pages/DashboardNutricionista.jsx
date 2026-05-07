@@ -669,8 +669,8 @@ const DashboardNutricionista = ({ onLogout }) => {
             </aside>
 
             {/* Main Area */}
-            <main className="flex-1 lg:ml-80 p-6 md:p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
-                <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-6 -m-6 mb-10 rounded-3xl border border-transparent dark:border-slate-800/50">
+            <main className="flex-1 lg:ml-80 p-4 md:p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
+                <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-5 rounded-3xl border border-transparent dark:border-slate-800/50">
                     <div className="flex items-center gap-4 md:gap-6">
                         <button 
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -806,9 +806,9 @@ const DashboardNutricionista = ({ onLogout }) => {
                         </div>
                     </div>
                 ) : activeTab === 'cuentas' ? (
-                    <div className="space-y-8 md:space-y-12">
-                        <div className="card-premium p-6 md:p-12 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 md:mb-12">
+                    <div className="space-y-6 md:space-y-12">
+                        <div className="card-premium p-4 md:p-12 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 md:mb-12">
                                 <div>
                                     <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Administración de Cuentas</h3>
                                     <p className="text-[10px] md:text-xs text-slate-400 dark:text-slate-500 font-bold mt-2 uppercase tracking-widest">Control de acceso y perfiles de sistema</p>
@@ -833,13 +833,13 @@ const DashboardNutricionista = ({ onLogout }) => {
                                 </button>
                             </div>
 
-                            <div className="relative mb-10">
-                                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" size={18} />
+                            <div className="relative mb-8">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" size={16} />
                                 <input 
                                     placeholder="Buscar por nombre o email..." 
                                     value={searchCuentas}
                                     onChange={(e) => setSearchCuentas(e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl pl-12 pr-6 py-4 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-health-500/5 transition-all text-slate-900 dark:text-white" 
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl pl-11 pr-5 py-3.5 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-health-500/5 transition-all text-slate-900 dark:text-white" 
                                 />
                             </div>
                             
