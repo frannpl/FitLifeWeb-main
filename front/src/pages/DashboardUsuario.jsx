@@ -18,6 +18,7 @@ const DashboardUsuario = () => {
 
     const [assignedPlan, setAssignedPlan] = useState(null);
     const [assignedRoutine, setAssignedRoutine] = useState(null);
+    const [settingsTab, setSettingsTab] = useState('profile');
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -251,8 +252,6 @@ const DashboardUsuario = () => {
                 </div>
         </div>
     );
-
-    const [settingsTab, setSettingsTab] = useState('profile');
 
     const renderSettings = () => (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
