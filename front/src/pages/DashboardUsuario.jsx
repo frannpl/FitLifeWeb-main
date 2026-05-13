@@ -365,7 +365,7 @@ const DashboardUsuario = () => {
                                 <button 
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${activeTab === tab ? 'bg-slate-900 dark:bg-health-600 text-white shadow-lg shadow-slate-900/20 dark:shadow-health-900/20' : 'text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                                    className={`px-4 py-3 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all ${activeTab === tab ? 'bg-slate-900 dark:bg-health-600 text-white shadow-lg shadow-slate-900/20 dark:shadow-health-900/20' : 'text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
                                 >
                                     {tab === 'overview' ? 'General' : tab === 'diet' ? 'Dieta' : tab === 'training' ? 'Entreno' : 'Ajustes'}
                                 </button>
