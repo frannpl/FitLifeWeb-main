@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Activity, Calendar, Clock, ChevronRight, User, Users, Settings, LogOut, 
-    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, Layout, Info, Utensils, MessageCircle,
+    TrendingUp, Scale, Zap, Target, Apple, Dumbbell, LayoutDashboard, Info, Utensils, MessageCircle,
     Bell, Shield, Moon, Sun, Globe, Mail, Phone, Save
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
