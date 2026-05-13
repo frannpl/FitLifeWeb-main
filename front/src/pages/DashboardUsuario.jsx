@@ -250,6 +250,7 @@ const DashboardUsuario = () => {
                         </div>
                     )}
                 </div>
+            </div>
         </div>
     );
 
