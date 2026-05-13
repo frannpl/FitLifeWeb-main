@@ -690,7 +690,7 @@ const DashboardNutricionista = ({ onLogout }) => {
 
             {/* Main Area */}
             <main className="flex-1 lg:ml-80 p-4 md:p-12 bg-surface-base dark:bg-slate-950 overflow-y-auto min-h-screen">
-                <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-5 rounded-3xl border border-transparent dark:border-slate-800/50">
+                <header className="relative z-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 bg-surface-base/80 dark:bg-slate-900/50 backdrop-blur-md p-5 rounded-3xl border border-transparent dark:border-slate-800/50">
                     <div className="flex items-center gap-4 md:gap-6">
                         <button 
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
