@@ -48,7 +48,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                         <div className="flex items-center gap-8 mr-4 border-r border-slate-200 dark:border-slate-800 pr-8">
                              <button 
                                 onClick={toggleTheme}
-                                className={`p-2 rounded-xl transition-all duration-300 ${isLandingHero ? 'bg-slate-900/5 dark:bg-white/10 text-slate-500 dark:text-white hover:bg-slate-900/10 dark:hover:bg-white/20' : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-health-50 dark:hover:bg-health-900/20'}`}
+                                className={`p-2 rounded-xl transition-all duration-300 ${isLandingHero ? 'bg-slate-900/5 dark:bg-white/10 text-slate-900 dark:text-white hover:bg-slate-900/10 dark:hover:bg-white/20' : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-health-50 dark:hover:bg-health-900/20'}`}
                              >
                                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                              </button>
@@ -118,7 +118,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                     <div className="flex items-center gap-4 md:hidden">
                         <button 
                             onClick={toggleTheme}
-                            className={`p-2 rounded-xl transition-all duration-300 ${isLandingHero ? 'bg-white/10 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}
+                            className={`p-2 rounded-xl transition-all duration-300 ${isLandingHero ? 'bg-slate-900/5 dark:bg-white/10 text-slate-900 dark:text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}
                         >
                             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
