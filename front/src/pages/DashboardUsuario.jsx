@@ -249,9 +249,10 @@ const DashboardUsuario = () => {
                         </div>
                     )}
                 </div>
-            </div>
         </div>
     );
+
+    const [settingsTab, setSettingsTab] = useState('profile');
 
     const renderSettings = () => (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
@@ -266,11 +267,16 @@ const DashboardUsuario = () => {
                     </div>
                     <div className="space-y-2">
                         {[
-                            { icon: <Shield size={16} />, label: 'Privacidad y Seguridad' },
-                            { icon: <Bell size={16} />, label: 'Notificaciones' },
-                            { icon: <Globe size={16} />, label: 'Idioma y Región' }
+                            { id: 'profile', icon: <User size={16} />, label: 'Mi Perfil Profesional' },
+                            { id: 'privacy', icon: <Shield size={16} />, label: 'Privacidad y Seguridad' },
+                            { id: 'notifications', icon: <Bell size={16} />, label: 'Notificaciones' },
+                            { id: 'language', icon: <Globe size={16} />, label: 'Idioma y Región' }
                         ].map(item => (
-                            <button key={item.label} className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold text-xs transition-all text-left">
+                            <button 
+                                key={item.id} 
+                                onClick={() => setSettingsTab(item.id)}
+                                className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-left font-bold text-xs ${settingsTab === item.id ? 'bg-health-500 text-white shadow-lg shadow-health-500/20' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-500 dark:text-slate-400'}`}
+                            >
                                 {item.icon} {item.label}
                             </button>
                         ))}
@@ -281,70 +287,133 @@ const DashboardUsuario = () => {
             <div className="lg:col-span-8">
                 <div className="card-premium p-10 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
                     <div className="flex justify-between items-center mb-10 pb-6 border-b border-slate-50 dark:border-slate-800">
-                        <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Mi Perfil Profesional</h3>
+                        <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+                            {settingsTab === 'profile' ? 'Mi Perfil' : settingsTab === 'privacy' ? 'Seguridad' : settingsTab === 'notifications' ? 'Notificaciones' : 'Preferencias'}
+                        </h3>
                         {saveStatus === 'success' && <span className="text-health-500 text-[10px] font-black uppercase animate-pulse">¡Cambios Guardados!</span>}
                     </div>
 
-                    <form onSubmit={handleUpdateProfile} className="space-y-8">
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Completo</label>
-                                <input 
-                                    value={profile?.nombre || ''} 
-                                    onChange={e => setProfile({...profile, nombre: e.target.value})}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
-                                />
+                    {settingsTab === 'profile' ? (
+                        <form onSubmit={handleUpdateProfile} className="space-y-8">
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Completo</label>
+                                    <input 
+                                        value={profile?.nombre || ''} 
+                                        onChange={e => setProfile({...profile, nombre: e.target.value})}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Correo Electrónico</label>
+                                    <input 
+                                        disabled
+                                        value={profile?.email || ''} 
+                                        className="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-400 dark:text-slate-500 font-bold opacity-70 cursor-not-allowed"
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Correo Electrónico</label>
-                                <input 
-                                    disabled
-                                    value={profile?.email || ''} 
-                                    className="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-400 dark:text-slate-500 font-bold opacity-70 cursor-not-allowed"
-                                />
-                            </div>
-                        </div>
 
-                        <div className="grid grid-cols-3 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Peso (kg)</label>
-                                <input 
-                                    type="number" step="0.1"
-                                    value={profile?.pesoActual || ''} 
-                                    onChange={e => setProfile({...profile, pesoActual: parseFloat(e.target.value)})}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
-                                />
+                            <div className="grid grid-cols-3 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Peso (kg)</label>
+                                    <input 
+                                        type="number" step="0.1"
+                                        value={profile?.pesoActual || ''} 
+                                        onChange={e => setProfile({...profile, pesoActual: parseFloat(e.target.value)})}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Altura (m)</label>
+                                    <input 
+                                        type="number" step="0.01"
+                                        value={profile?.altura || ''} 
+                                        onChange={e => setProfile({...profile, altura: parseFloat(e.target.value)})}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Edad</label>
+                                    <input 
+                                        type="number"
+                                        value={profile?.edad || ''} 
+                                        onChange={e => setProfile({...profile, edad: parseInt(e.target.value)})}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Altura (m)</label>
-                                <input 
-                                    type="number" step="0.01"
-                                    value={profile?.altura || ''} 
-                                    onChange={e => setProfile({...profile, altura: parseFloat(e.target.value)})}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Edad</label>
-                                <input 
-                                    type="number"
-                                    value={profile?.edad || ''} 
-                                    onChange={e => setProfile({...profile, edad: parseInt(e.target.value)})}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all"
-                                />
-                            </div>
-                        </div>
 
-                        <div className="pt-6">
-                            <button 
-                                type="submit" 
-                                disabled={saveStatus === 'loading'}
-                                className="px-10 py-5 bg-health-500 hover:bg-health-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-health-500/20 flex items-center gap-3 text-[10px] uppercase tracking-widest disabled:opacity-50"
-                            >
-                                <Save size={18} /> {saveStatus === 'loading' ? 'Guardando...' : 'Guardar Preferencias'}
-                            </button>
+                            <div className="pt-6">
+                                <button 
+                                    type="submit" 
+                                    disabled={saveStatus === 'loading'}
+                                    className="px-10 py-5 bg-health-500 hover:bg-health-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-health-500/20 flex items-center gap-3 text-[10px] uppercase tracking-widest disabled:opacity-50"
+                                >
+                                    <Save size={18} /> {saveStatus === 'loading' ? 'Guardando...' : 'Guardar Perfil'}
+                                </button>
+                            </div>
+                        </form>
+                    ) : settingsTab === 'privacy' ? (
+                        <div className="space-y-8">
+                            <div className="space-y-4">
+                                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Gestiona tu seguridad y contraseña de acceso.</p>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Nueva Contraseña</label>
+                                        <input type="password" placeholder="••••••••" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Confirmar Contraseña</label>
+                                        <input type="password" placeholder="••••••••" className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-4 focus:ring-health-500/10 transition-all" />
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => {setSaveStatus('success'); setTimeout(()=>setSaveStatus(null), 3000)}} className="px-10 py-5 bg-slate-900 dark:bg-slate-800 text-white font-black rounded-2xl hover:bg-health-500 transition-all text-[10px] uppercase tracking-widest">Actualizar Seguridad</button>
                         </div>
-                    </form>
+                    ) : settingsTab === 'notifications' ? (
+                        <div className="space-y-8">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Configura cómo quieres recibir tus alertas de salud.</p>
+                            <div className="space-y-4">
+                                {[
+                                    { t: 'Recordatorios de Dieta', d: 'Recibe alertas 15 min antes de cada comida.' },
+                                    { t: 'Sesiones de Entrenamiento', d: 'Notificaciones sobre tus rutinas diarias.' },
+                                    { t: 'Mensajes Directos', d: 'Avisos cuando tu nutricionista te escriba.' }
+                                ].map((n, i) => (
+                                    <div key={i} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                        <div>
+                                            <p className="font-black text-slate-900 dark:text-white text-sm">{n.t}</p>
+                                            <p className="text-[10px] text-slate-500 font-medium mt-1">{n.d}</p>
+                                        </div>
+                                        <div className="w-12 h-6 bg-health-500 rounded-full relative cursor-pointer shadow-inner">
+                                            <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <button onClick={() => {setSaveStatus('success'); setTimeout(()=>setSaveStatus(null), 3000)}} className="px-10 py-5 bg-health-500 text-white font-black rounded-2xl hover:bg-health-600 transition-all text-[10px] uppercase tracking-widest shadow-lg shadow-health-500/20">Guardar Notificaciones</button>
+                        </div>
+                    ) : (
+                        <div className="space-y-8">
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Idioma de la Interfaz</label>
+                                    <select className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl px-6 py-4 text-slate-900 dark:text-white font-bold focus:outline-none appearance-none">
+                                        <option>Español (España)</option>
+                                        <option>English (UK)</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Formato de Unidad</label>
+                                    <div className="flex gap-4">
+                                        <button className="flex-1 py-4 bg-health-500 text-white font-black rounded-xl text-[10px] uppercase">Métrico (kg/cm)</button>
+                                        <button className="flex-1 py-4 bg-slate-50 dark:bg-slate-800 text-slate-400 font-black rounded-xl text-[10px] uppercase">Imperial (lb/ft)</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => {setSaveStatus('success'); setTimeout(()=>setSaveStatus(null), 3000)}} className="px-10 py-5 bg-health-500 text-white font-black rounded-2xl hover:bg-health-600 transition-all text-[10px] uppercase tracking-widest">Cambiar Preferencias</button>
+                        </div>
+                    )}
                 </div>
             </div>
         </motion.div>
