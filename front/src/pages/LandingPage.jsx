@@ -25,17 +25,17 @@ const LandingPage = () => {
     return (
         <div className="bg-surface-base min-h-screen">
             {/* Hero Section - Dynamic Aesthetic */}
-            <section className="relative pt-40 md:pt-64 pb-24 md:pb-48 overflow-hidden min-h-screen flex items-center bg-white dark:bg-slate-950 transition-colors duration-700">
+            <section className="relative pt-40 md:pt-64 pb-24 md:pb-48 overflow-hidden min-h-screen flex items-center bg-white dark:bg-slate-950 transition-colors duration-700 w-full">
                 <div className="absolute inset-0 z-0">
                     <img 
                         src="/assets/fitness_bg.png" 
                         alt="Fitness background" 
-                        className="w-full h-full object-cover opacity-50 dark:opacity-40 contrast-125 brightness-75 dark:brightness-50"
+                        className="w-full h-full object-cover object-center opacity-50 dark:opacity-40 contrast-125 brightness-75 dark:brightness-50"
                     />
                     {/* Multi-layered overlays for depth and visibility */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/40 to-surface-base dark:from-slate-950/80 dark:via-slate-950/40 dark:to-slate-950 transition-colors duration-700"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-transparent to-white/40 dark:from-slate-950/80 dark:via-transparent dark:to-slate-950/40 transition-colors duration-700"></div>
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.4)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.8)_100%)] transition-colors duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/50 to-white dark:from-slate-950/90 dark:via-slate-950/50 dark:to-slate-950 transition-colors duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-white dark:from-slate-950 via-transparent dark:to-slate-950 transition-colors duration-700"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.8)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.9)_100%)] transition-colors duration-700"></div>
                 </div>
                 
                 <div className="max-w-7xl mx-auto px-8 relative z-10 w-full">
