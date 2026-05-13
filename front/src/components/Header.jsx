@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Menu, X, Activity, LogOut, Sun, Moon, Settings } from 'lucide-react';
+import { User, Menu, X, Activity, LogOut, Sun, Moon, Settings, LayoutDashboard, Utensils, Dumbbell } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
@@ -145,7 +145,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                                             <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{user}</p>
                                         </div>
                                     </div>
-                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><Layout size={18} /> Panel Control</button>
+                                    <button onClick={() => { navigate(role === 'nutricionista' ? '/dashboard-nutricionista' : '/dashboard'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><LayoutDashboard size={18} /> Panel Control</button>
                                     {role === 'nutricionista' && (
                                         <>
                                             <button onClick={() => { navigate('/planes'); setMobileMenuOpen(false); }} className="w-full text-slate-600 dark:text-slate-400 font-bold py-3 text-left flex items-center gap-3"><Utensils size={18} /> Planes</button>
