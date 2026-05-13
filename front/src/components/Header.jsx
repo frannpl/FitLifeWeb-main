@@ -134,7 +134,7 @@ const Header = ({ user, role, onLogout, theme, toggleTheme }) => {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-4 shadow-2xl overflow-y-auto max-h-[calc(100vh-100%)]"
+                            className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-4 shadow-2xl overflow-y-auto max-h-[85vh]"
                         >
                             {user ? (
                                 <div className="space-y-4">

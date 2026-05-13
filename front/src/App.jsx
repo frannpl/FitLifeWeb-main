@@ -26,7 +26,7 @@ const AppContent = ({ user, role, onLogout, theme, toggleTheme }) => {
   const isDashboardNutri = location.pathname === '/dashboard-nutricionista';
 
   return (
-    <div className="min-h-screen bg-surface-base dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-health-100 dark:selection:bg-health-900/30 selection:text-health-900 dark:selection:text-health-100 flex flex-col transition-colors duration-500">
+    <div className="min-h-screen bg-surface-base dark:bg-slate-950 text-slate-900 dark:text-white font-sans selection:bg-health-100 dark:selection:bg-health-900/30 selection:text-health-900 dark:selection:text-health-100 flex flex-col transition-colors duration-500 overflow-x-hidden">
       {!isDashboardNutri && (
         <Header 
           user={user} 

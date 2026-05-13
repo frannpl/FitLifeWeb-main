@@ -178,10 +178,10 @@ const DashboardUsuario = () => {
             </div>
 
             {/* Main Content: Evolution & Shortcuts */}
-            <div className="lg:col-span-8 flex flex-col gap-8 h-full overflow-y-auto custom-scrollbar pr-2">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-10 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
-                    <div className="flex justify-between items-end mb-10 border-b border-slate-50 dark:border-slate-800 pb-6">
-                        <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Métricas Antropométricas</h3>
+            <div className="lg:col-span-8 flex flex-col gap-8 h-full overflow-y-auto overflow-x-hidden custom-scrollbar pr-2">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-6 md:p-10 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 border-b border-slate-50 dark:border-slate-800 pb-6 gap-4">
+                        <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Métricas Antropométricas</h3>
                         <div className="flex gap-4">
                             <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-health-500"></div> <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase">Actual</span></div>
                             <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800"></div> <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase">Base</span></div>
@@ -198,7 +198,7 @@ const DashboardUsuario = () => {
                             <div key={m.label} className="group cursor-default">
                                 <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">{m.label}</p>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-4xl font-black text-slate-900 dark:text-white group-hover:text-health-600 dark:group-hover:text-health-400 transition-colors">{m.val || 0}</span>
+                                    <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white group-hover:text-health-600 dark:group-hover:text-health-400 transition-colors">{m.val || 0}</span>
                                     <span className="text-xs text-slate-400 dark:text-slate-500 font-bold">cm</span>
                                 </div>
                                 <div className="mt-4 w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
@@ -358,7 +358,7 @@ const DashboardUsuario = () => {
                         <span className="text-health-500 dark:text-health-400 font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Panel Nutricional</span>
                         <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">Mi Proceso.</h1>
                     </div>
-                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800 w-full md:w-auto overflow-x-auto custom-scrollbar">
+                    <div className="flex bg-white dark:bg-slate-900 rounded-2xl p-1.5 shadow-sm border border-slate-100 dark:border-slate-800 w-full md:w-auto overflow-x-auto no-scrollbar">
                         {['overview', 'diet', 'training', 'settings'].map(tab => {
                             if (tab === 'training' && profile?.tarifa === 'Basic') return null;
                             return (

@@ -30,6 +30,14 @@
     .custom-scrollbar::-webkit-scrollbar-thumb {
         @apply bg-slate-200 rounded-full hover:bg-health-500 transition-colors;
     }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }
 
 @keyframes slow-spin {
