@@ -12,7 +12,6 @@ public class ComidaMapper {
         ComidaDTO dto = new ComidaDTO();
         dto.setId(entity.getId());
         dto.setNombre(entity.getNombre());
-        dto.setTipo(entity.getTipo());
         dto.setCalorias(entity.getCalorias());
         dto.setProteinas(entity.getProteinas());
         dto.setGrasas(entity.getGrasas());
@@ -25,7 +24,6 @@ public class ComidaMapper {
         Comida entity = new Comida();
         entity.setId(dto.getId());
         entity.setNombre(dto.getNombre());
-        entity.setTipo(dto.getTipo());
         entity.setCalorias(dto.getCalorias());
         entity.setProteinas(dto.getProteinas());
         entity.setGrasas(dto.getGrasas());

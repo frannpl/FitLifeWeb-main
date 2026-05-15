@@ -10,7 +10,6 @@ import lombok.Setter;
 public class ComidaDTO {
 	private int id;
 	private String nombre;
-	private String tipo;
 	private float calorias;
 	private float proteinas;
 	private float grasas;
