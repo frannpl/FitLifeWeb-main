@@ -33,9 +33,6 @@ public class Rutina {
     @Column(name = "duracion_semanas")
     private int duracion;
 
-    @Column(name = "comidas_horarias")
-    private Integer comidasHorarias;
-
     @Column(name = "id_usuario")
     private Integer usuarioId;
 }

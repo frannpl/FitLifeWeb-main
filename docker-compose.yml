@@ -39,10 +39,11 @@ services:
     networks:
       - fitlife-net
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
-      interval: 30s
+      test: ["CMD-SHELL", "nc -z localhost 8080 || exit 1"]
+      interval: 20s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 60s
     restart: unless-stopped
 
   frontend:

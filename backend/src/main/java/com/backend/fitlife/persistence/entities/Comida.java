@@ -25,9 +25,6 @@ public class Comida {
     @Column(length = 50)
     private String nombre;
 
-    @Column(length = 30)
-    private String tipo;
-
     private Float calorias;
     private Float proteinas;
     private Float grasas;

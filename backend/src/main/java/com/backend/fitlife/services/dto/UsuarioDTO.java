@@ -16,8 +16,8 @@ public class UsuarioDTO {
 	private Integer edad;
 	private String genero;
 	private String tarifa;
-	private String fechaUltimaCita;
-	private String fechaProximaCita;
+	private java.time.LocalDate fechaUltimaCita;
+	private java.time.LocalDate fechaProximaCita;
 	private Float porcentajeGrasa;
 	private Float medidaPecho;
 	private Float medidaCintura;

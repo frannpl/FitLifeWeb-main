@@ -21,11 +21,11 @@ public class Ejercicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(length = 50)
-	private String nombre;
-	
-	@Column(length = 50, name = "grupo_muscular")
-	private String grupoMuscular;
+	    @Column(length = 60, name = "nombre_ejercicio")
+    private String nombre;
+
+    @Column(length = 30, name = "grupo_muscular")
+    private String grupoMuscular;
 	
 	@Column(length = 120)
 	private String descripcion;

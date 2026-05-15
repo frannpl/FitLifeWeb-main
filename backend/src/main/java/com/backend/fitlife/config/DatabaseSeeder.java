@@ -44,7 +44,6 @@ public class DatabaseSeeder {
             if (repository.count() == 0) {
                 com.backend.fitlife.persistence.entities.Comida c1 = new com.backend.fitlife.persistence.entities.Comida();
                 c1.setNombre("Pollo con Arroz");
-                c1.setTipo("Almuerzo");
                 c1.setCalorias(450.0f);
                 c1.setProteinas(30.0f);
                 c1.setGrasas(10.0f);
@@ -52,7 +51,6 @@ public class DatabaseSeeder {
 
                 com.backend.fitlife.persistence.entities.Comida c2 = new com.backend.fitlife.persistence.entities.Comida();
                 c2.setNombre("Avena con Frutas");
-                c2.setTipo("Desayuno");
                 c2.setCalorias(300.0f);
                 c2.setProteinas(10.0f);
                 c2.setGrasas(5.0f);

@@ -44,10 +44,10 @@ public class Usuario {
 	private String tarifa;
 
 	@Column(name = "fecha_ultima_cita")
-	private String fechaUltimaCita;
+	private java.time.LocalDate fechaUltimaCita;
 
 	@Column(name = "fecha_proxima_cita")
-	private String fechaProximaCita;
+	private java.time.LocalDate fechaProximaCita;
 
 	@Column(name = "porcentaje_grasa")
 	private Float porcentajeGrasa;
