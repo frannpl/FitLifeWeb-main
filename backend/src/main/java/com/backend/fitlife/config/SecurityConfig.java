@@ -67,6 +67,7 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(java.util.List.of(
             "http://localhost:[*]",
             "http://127.0.0.1:[*]",
+            "http://*:[*]",
             "https://*.vercel.app"
         ));
         
